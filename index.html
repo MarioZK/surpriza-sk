@@ -22,6 +22,33 @@
       --shadowSoft: 0 18px 60px rgba(0,0,0,.40);
     }
 
+    .breakWrap{
+  margin-top: 12px;
+  display:flex;
+  justify-content:center;
+}
+
+.breakBtn{
+  width:min(420px, 92%);
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.16);
+  position: relative;
+  overflow:hidden;
+}
+
+.breakBtn:before{
+  content:"";
+  position:absolute; inset:-120px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.22), transparent 55%);
+  transform: translateX(-40%);
+  animation: shine 2.2s ease-in-out infinite;
+  opacity:.65;
+}
+
+.breakBtn:hover{
+  transform: translateY(-1px);
+}
+
     /* ===== PASSWORD UNLOCK (ADDED) ===== */
 .lockPassWrap{
   width:min(760px, 92vw);
@@ -32,6 +59,55 @@
   background: rgba(0,0,0,.20);
   box-shadow: 0 22px 80px rgba(0,0,0,.40);
   position:relative;
+}
+
+    .breakCard{
+  width:min(980px, 96vw);
+  border-radius: 30px;
+  background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow: 0 34px 160px rgba(0,0,0,.74);
+  padding: 16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.breakTop{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.breakMsgBox{
+  border-radius: 20px;
+  padding: 16px;
+  line-height:1.6;
+  font-size: 16px;
+  color: rgba(20,20,20,.92);
+  min-height: 220px;
+  overflow-y:auto;
+  scroll-behavior:smooth;
+  white-space: pre-wrap;
+
+  background:
+    radial-gradient(1200px 500px at 10% 0%, rgba(255,125,180,.16), transparent 60%),
+    radial-gradient(1200px 500px at 90% 0%, rgba(122,77,255,.14), transparent 60%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.92) 0px,
+      rgba(255,255,255,.92) 26px,
+      rgba(255,240,248,.92) 27px
+    );
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+}
+
+.breakActions{
+  display:flex;
+  justify-content:center;
 }
 
 .lockPassTitle{
@@ -1061,6 +1137,11 @@
       pointer-events:none;
     }
     .lockFlash.flash{ animation: cineFlash 0.4s ease; }
+    body.breakMode{
+  filter: grayscale(1) contrast(1.05);
+  transition: filter .4s ease;
+}
+
   </style>
 </head>
 
@@ -1139,6 +1220,24 @@
     </div>
   </div>
 
+
+  <div class="overlay" id="breakOverlay" aria-hidden="true">
+  <div class="breakCard" role="dialog" aria-modal="true">
+    <div class="breakTop">
+      <span class="pill">💔 SAFE MODE</span>
+      <button class="btn2" id="breakClose">✖ Close</button>
+    </div>
+
+    <div class="breakMsgBox" id="breakMsgBox">
+      <span id="breakTyped"></span><span class="typingCursor" id="breakCursor"></span>
+    </div>
+
+    <div class="breakActions">
+      <button class="btn2" id="breakBack">💖 Back to us</button>
+    </div>
+  </div>
+</div>
+
   <div class="overlay" id="overlay" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true">
       <div class="modalLeft">
@@ -1191,6 +1290,9 @@
           </label>
         </div>
         <div class="finalStatus" id="finalStatus"></div>
+        <div class="breakWrap">
+  <button class="btn2 breakBtn" id="breakBtn">🤍 If we ever break up…</button>
+</div>
       </div>
     </div>
   </div>
@@ -1625,6 +1727,117 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
 
       requestAnimationFrame(drawEq);
     }
+
+    // ===== IF WE EVER BREAK UP (CINEMATIC) =====
+const breakBtn = document.getElementById("breakBtn");
+const breakOverlay = document.getElementById("breakOverlay");
+const breakClose = document.getElementById("breakClose");
+const breakBack = document.getElementById("breakBack");
+
+const breakTyped = document.getElementById("breakTyped");
+const breakCursor = document.getElementById("breakCursor");
+const breakMsgBox = document.getElementById("breakMsgBox");
+
+const BREAK_MESSAGE =
+`Dacă vreodată ajungem într-un punct în care lucrurile nu mai merg...
+
+Sper să nu plecăm din orgoliu.
+Sper să nu uităm cât am luptat.
+Sper să ne amintim cum a fost la început.
+
+Și dacă într-o zi drumurile noastre chiar se despart,
+vreau să știi un lucru:
+
+Nu se vor despartii niciodata
+NICI
+O
+DATA
+
+CE SA VEZI?
+RAMAN!`;
+
+function typeBreak(text){
+  breakTyped.textContent = "";
+  breakCursor.style.display = "inline-block";
+
+  let raw = "";
+  let i = 0;
+
+  const step = ()=>{
+    if(i >= text.length){
+      breakTyped.innerHTML = applyHighlights(raw);
+      breakCursor.style.display = "none";
+      return;
+    }
+    raw += text[i++];
+    breakTyped.textContent = raw;
+    breakMsgBox.scrollTop = breakMsgBox.scrollHeight;
+
+    const ch = raw[raw.length-1];
+    let d = 22;
+    if(ch === " ") d = 12;
+    if(ch === "\n") d = 120;
+    if([",",".","!","?","…",":",";"].includes(ch)) d = 160;
+    setTimeout(step, d);
+  };
+  step();
+}
+
+function openBreak(){
+  document.body.classList.add("breakMode");
+  setPauseFX(true);
+  breakOverlay.classList.add("show");
+  breakOverlay.setAttribute("aria-hidden","false");
+
+  // fade audio (optional)
+  try{
+    const startVol = audio.volume;
+    const to = Math.min(0.22, startVol);
+    const steps = 12;
+    let k = 0;
+    const t = setInterval(()=>{
+      k++;
+      audio.volume = startVol + (to - startVol) * (k/steps);
+      if(k>=steps) clearInterval(t);
+    }, 40);
+  }catch(e){}
+
+  toast("Safe mode 🤍");
+  typeBreak(BREAK_MESSAGE);
+}
+
+function closeBreak(){
+  document.body.classList.remove("breakMode");
+  breakOverlay.classList.remove("show");
+  breakOverlay.setAttribute("aria-hidden","true");
+  setPauseFX(false);
+
+  // restore volume (optional)
+  try{
+    const to = 0.85;
+    const startVol = audio.volume;
+    const steps = 12;
+    let k = 0;
+    const t = setInterval(()=>{
+      k++;
+      audio.volume = startVol + (to - startVol) * (k/steps);
+      if(k>=steps) clearInterval(t);
+    }, 40);
+  }catch(e){}
+}
+
+breakBtn.addEventListener("click", openBreak);
+breakClose.addEventListener("click", closeBreak);
+breakBack.addEventListener("click", ()=>{
+  toast("Back to us 💖");
+  closeBreak();
+});
+
+// click outside closes
+breakOverlay.addEventListener("click",(e)=>{
+  if(e.target === breakOverlay) closeBreak();
+});
+
 
     // Typing
     function applyHighlights(text){
@@ -2455,6 +2668,7 @@ function doUnlockByPassword(){
   </script>
 </body>
 </html>
+
 
 
 
