@@ -1146,6 +1146,120 @@ body.breakMode .hearts{
   transition: filter .4s ease;
 }
 
+    /* ===== BREAK: GLITCH TAKEOVER ===== */
+.breakFX{
+  position:fixed; inset:0;
+  display:none;
+  z-index:9998;
+  pointer-events:none;
+  background: radial-gradient(900px 600px at 50% 40%, rgba(255,255,255,.10), rgba(0,0,0,.92));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.breakFX.show{ display:block; }
+
+.breakFX:before,
+.breakFX:after{
+  content:"";
+  position:absolute; inset:-40px;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.06) 0px,
+      rgba(255,255,255,.06) 1px,
+      transparent 3px,
+      transparent 6px
+    );
+  opacity:.25;
+  animation: scan 2.2s linear infinite;
+}
+.breakFX:after{
+  opacity:.18;
+  filter: blur(2px);
+  animation: scan 1.4s linear infinite reverse;
+}
+
+@keyframes scan{
+  0%{ transform: translateY(-20px); }
+  100%{ transform: translateY(20px); }
+}
+
+.breakGlitchText{
+  position:fixed; inset:0;
+  display:none;
+  z-index:9999;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.breakGlitchText.show{ display:flex; }
+
+.breakBox{
+  width:min(860px, 94vw);
+  border-radius: 26px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.45);
+  box-shadow: 0 40px 160px rgba(0,0,0,.75);
+  overflow:hidden;
+}
+
+.breakHeader{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding: 12px 14px;
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.breakHeader .tag{
+  font-weight:1000;
+  letter-spacing:.14em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: rgba(255,255,255,.70);
+}
+.breakBody{
+  padding: 16px 14px 14px;
+}
+.breakBig{
+  font-size: clamp(22px, 3.5vw, 42px);
+  font-weight:1000;
+  letter-spacing:.06em;
+  line-height:1.05;
+  color: rgba(255,255,255,.95);
+  text-shadow: 0 0 16px rgba(255,255,255,.12);
+}
+.breakSmall{
+  margin-top:10px;
+  font-size: 15px;
+  line-height:1.6;
+  color: rgba(255,255,255,.78);
+  white-space: pre-wrap;
+}
+.breakActions{
+  padding: 12px 14px 14px;
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  border-top:1px solid rgba(255,255,255,.12);
+}
+
+.breakDanger{
+  position:relative;
+  overflow:hidden;
+}
+.breakDanger:before{
+  content:"";
+  position:absolute; inset:-80px;
+  background: radial-gradient(circle at 30% 30%, rgba(255,47,122,.20), transparent 55%);
+  transform: translateX(-40%);
+  animation: shine 2.2s ease-in-out infinite;
+  opacity:.75;
+}
+
+
 
   </style>
 </head>
@@ -1733,102 +1847,90 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
       requestAnimationFrame(drawEq);
     }
 
-    // ===== IF WE EVER BREAK UP (CINEMATIC) =====
+// ===== IF WE EVER BREAK UP — GLITCH TAKEOVER (VAR A) =====
 const breakBtn = document.getElementById("breakBtn");
-const breakOverlay = document.getElementById("breakOverlay");
-const breakClose = document.getElementById("breakClose");
-const breakBack = document.getElementById("breakBack");
 
-const breakTyped = document.getElementById("breakTyped");
-const breakCursor = document.getElementById("breakCursor");
-const breakMsgBox = document.getElementById("breakMsgBox");
+const breakFX = document.getElementById("breakFX");
+const breakTakeover = document.getElementById("breakTakeover");
+const breakTakeoverClose = document.getElementById("breakTakeoverClose");
+const breakTakeoverBack = document.getElementById("breakTakeoverBack");
+const breakTakeoverPromise = document.getElementById("breakTakeoverPromise");
+const breakSmall = document.getElementById("breakSmall");
 
-const BREAK_MESSAGE =
-`Dacă vreodată ajungem într-un punct în care lucrurile nu mai merg...
+const BREAK_LINES = [
+  "Dacă vreodată ne pierdem…\nnu vreau să plecăm din orgoliu.",
+  "Dacă vreodată ne certăm…\nvreau să ne amintim de început.",
+  "Dacă vreodată ne răcim…\nvreau să știi: eu încă aleg «noi».",
+  "Și dacă într-o zi pare final…\nnu e. E doar un capitol greu."
+];
 
-Sper să nu plecăm din orgoliu.
-Sper să nu uităm cât am luptat.
-Sper să ne amintim cum a fost la început.
-
-Și dacă într-o zi drumurile noastre chiar se despart,
-vreau să știi un lucru:
-
-Nu se vor despartii niciodata
-NICI
-O
-DATA
-
-CE SA VEZI?
-RAMAN!`;
-
-function typeBreak(text){
-  breakTyped.textContent = "";
-  breakCursor.style.display = "inline-block";
-
-  let raw = "";
-  let i = 0;
-
-  const step = ()=>{
-    if(i >= text.length){
-      breakTyped.innerHTML = applyHighlights(raw);
-      breakCursor.style.display = "none";
-      return;
-    }
-    raw += text[i++];
-    breakTyped.textContent = raw;
-    breakMsgBox.scrollTop = breakMsgBox.scrollHeight;
-
-    const ch = raw[raw.length-1];
-    let d = 22;
-    if(ch === " ") d = 12;
-    if(ch === "\n") d = 120;
-    if([",",".","!","?","…",":",";"].includes(ch)) d = 160;
-    setTimeout(step, d);
-  };
-  step();
-}
-
-function openBreak(){
-  overlay.classList.remove("show"); // ascunde modalul mare ca să nu acopere break
-  document.body.classList.add("breakMode");
-  breakOverlay.classList.add("show");
-  breakOverlay.setAttribute("aria-hidden","false");
-
-  // fade audio
+function setVolSmooth(to){
   try{
-    const startVol = audio.volume;
-    const to = Math.min(0.22, startVol);
-    const steps = 12;
+    const from = audio.volume;
+    const steps = 14;
     let k = 0;
     const t = setInterval(()=>{
       k++;
-      audio.volume = startVol + (to - startVol) * (k/steps);
+      audio.volume = from + (to - from) * (k/steps);
       if(k>=steps) clearInterval(t);
-    }, 40);
+    }, 35);
+  }catch(e){}
+}
+
+function openBreakTakeover(){
+  // închide orice overlay care ar putea fi peste
+  try{ overlay.classList.remove("show"); }catch(e){}
+  try{ quizOverlay.classList.remove("show"); }catch(e){}
+  try{ finalCine.classList.remove("show"); }catch(e){}
+
+  setPauseFX(true);
+  document.body.classList.add("breakMode");
+
+  breakFX.classList.add("show");
+  breakTakeover.classList.add("show");
+  breakTakeover.setAttribute("aria-hidden","false");
+
+  breakSmall.textContent = BREAK_LINES[Math.floor(Math.random()*BREAK_LINES.length)];
+
+  // audio mai încet
+  setVolSmooth(0.18);
+
+  // micro “shake”
+  try{
+    document.body.animate(
+      [{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],
+      {duration:260, easing:"ease-out"}
+    );
   }catch(e){}
 
   toast("Safe mode 🤍");
-  typeBreak(BREAK_MESSAGE);
 }
 
-function closeBreak(){
+function closeBreakTakeover(){
   document.body.classList.remove("breakMode");
-  breakOverlay.classList.remove("show");
-  breakOverlay.setAttribute("aria-hidden","true");
 
-  // restore volume to slider
-  try{
-    const targetVol = Math.max(0, Math.min(1, vol.value/100));
-    const startVol = audio.volume;
-    const steps = 12;
-    let k = 0;
-    const t = setInterval(()=>{
-      k++;
-      audio.volume = startVol + (targetVol - startVol) * (k/steps);
-      if(k>=steps) clearInterval(t);
-    }, 40);
-  }catch(e){}
+  breakFX.classList.remove("show");
+  breakTakeover.classList.remove("show");
+  breakTakeover.setAttribute("aria-hidden","true");
+
+  setPauseFX(false);
+  setVolSmooth(0.85);
 }
+
+breakBtn.addEventListener("click", openBreakTakeover);
+breakTakeoverClose.addEventListener("click", closeBreakTakeover);
+breakTakeoverBack.addEventListener("click", ()=>{ toast("Back to us 💖"); closeBreakTakeover(); });
+
+breakTakeoverPromise.addEventListener("click", ()=>{
+  toast("I still choose you 🤍");
+  launchConfetti();
+  closeBreakTakeover();
+});
+
+// click pe fundal să închidă
+breakTakeover.addEventListener("click", (e)=>{
+  if(e.target === breakTakeover) closeBreakTakeover();
+});
 
 
 breakBtn.addEventListener("click", openBreak);
@@ -2664,10 +2766,13 @@ if(now.getTime() < target.getTime()){
   hideLock();
 }
 
+      
+
     })();
   </script>
 </body>
 </html>
+
 
 
 
