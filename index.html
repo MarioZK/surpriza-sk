@@ -1135,9 +1135,6 @@
       background:white;
       opacity:0;
       pointer-events:none;
-      #breakOverlay{ 
-  z-index: 999; 
-}
     }
     .lockFlash.flash{ animation: cineFlash 0.4s ease; }
 body.breakMode .beatGlow,
@@ -1452,6 +1449,29 @@ body.breakMode .hearts{
 
     </div>
   </div>
+
+
+  <!-- ===== BREAK TAKEOVER FX (VAR A) ===== -->
+<div class="breakFX" id="breakFX"></div>
+
+<div class="breakGlitchText" id="breakTakeover" aria-hidden="true">
+  <div class="breakBox">
+    <div class="breakHeader">
+      <span class="tag">💔 SAFE MODE</span>
+      <button class="btn2" id="breakTakeoverClose">✖ Close</button>
+    </div>
+
+    <div class="breakBody">
+      <div class="breakBig">IF WE EVER BREAK UP…</div>
+      <div class="breakSmall" id="breakSmall"></div>
+    </div>
+
+    <div class="breakActions">
+      <button class="btn2" id="breakTakeoverBack">💖 Back to us</button>
+      <button class="btn2 breakDanger" id="breakTakeoverPromise">🤍 I still choose you</button>
+    </div>
+  </div>
+</div>
 
   <!-- ===== LOCK COUNTDOWN OVERLAY (ADDED) ===== -->
   <div class="lockOverlay" id="lockOverlay" aria-hidden="true">
@@ -1931,20 +1951,6 @@ breakTakeoverPromise.addEventListener("click", ()=>{
 breakTakeover.addEventListener("click", (e)=>{
   if(e.target === breakTakeover) closeBreakTakeover();
 });
-
-
-breakBtn.addEventListener("click", openBreak);
-breakClose.addEventListener("click", closeBreak);
-breakBack.addEventListener("click", ()=>{
-  toast("Back to us 💖");
-  closeBreak();
-});
-
-// click outside closes
-breakOverlay.addEventListener("click",(e)=>{
-  if(e.target === breakOverlay) closeBreak();
-});
-
 
     // Typing
     function applyHighlights(text){
@@ -2772,6 +2778,7 @@ if(now.getTime() < target.getTime()){
   </script>
 </body>
 </html>
+
 
 
 
