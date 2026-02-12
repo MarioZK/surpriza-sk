@@ -679,229 +679,167 @@
     }
     .finalStatus{ margin-top: 8px; font-weight: 1000; color: rgba(255,255,255,.78); min-height: 18px; }
   
-    /* ===== FINAL CINEMATIC (after accept) ===== */
-    .finale{
-      position:fixed; inset:0;
-      display:none;
-      z-index: 9999;
-      background: radial-gradient(1100px 700px at 50% 40%, rgba(255,47,122,.16), rgba(0,0,0,.86));
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-    }
-    .finale.show{ display:flex; animation: finaleIn .20s ease both; }
-    @keyframes finaleIn{ from{opacity:0} to{opacity:1} }
 
-    .finaleFlash{
-      position:absolute; inset:0;
-      background: rgba(255,255,255,0);
-      pointer-events:none;
-    }
-    .finaleFlash.fire{ animation: flash 240ms ease-out both; }
-    @keyframes flash{
-      0%{ background: rgba(255,255,255,0); }
-      35%{ background: rgba(255,255,255,.92); }
-      100%{ background: rgba(255,255,255,0); }
-    }
+/* ===== FINAL CINEMATIC ===== */
+.cineWrap{
+  width:min(1100px, 96vw);
+  height:min(90vh, 900px);
+  border-radius:30px;
+  background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+  border:1px solid rgba(255,255,255,.16);
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  overflow:hidden;
+  position:relative;
+}
+@media(max-width:900px){
+  .cineWrap{grid-template-columns:1fr;}
+}
+.cineFlash{
+  position:absolute;
+  inset:0;
+  background:white;
+  opacity:0;
+  pointer-events:none;
+}
+.flashAnim{ animation: cineFlash 0.4s ease; }
+@keyframes cineFlash{ 0%{opacity:1} 100%{opacity:0} }
 
-    .finaleWrap{
-      position:relative;
-      width:min(980px, 96vw);
-      display:grid;
-      place-items:center;
-      gap: 16px;
-    }
+.cineLeft{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:30px;
+  gap:18px;
+}
+.cineFrame{
+  position:relative;
+  width:100%;
+  max-width:420px;
+}
+.cineFrame img{
+  width:100%;
+  border-radius:20px;
+  transform:scale(1);
+  transition:transform 3s ease;
+  display:block;
+}
+.zoomIn{ transform:scale(1.12); }
 
-    .stamp{
-      width:min(980px, 96vw);
-      text-align:center;
-      transform: translateY(14px) scale(.94);
-      opacity:0;
-      filter: drop-shadow(0 40px 160px rgba(255,47,122,.18));
-    }
-    .stamp.show{ animation: stampSlam 820ms cubic-bezier(.12,.95,.22,1.02) both; }
-    @keyframes stampSlam{
-      0%{ opacity:0; transform: translateY(20px) scale(.88) rotate(-2deg); }
-      40%{ opacity:1; transform: translateY(0px) scale(1.04) rotate(0deg); }
-      60%{ transform: translateY(0px) scale(.99); }
-      100%{ opacity:1; transform: translateY(0px) scale(1); }
-    }
-    .stampInner{
-      display:inline-block;
-      padding: 18px 18px;
-      border-radius: 26px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
-      box-shadow: 0 30px 150px rgba(0,0,0,.70);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+.cineRing{
+  position:absolute;
+  inset:0;
+  border:3px solid var(--pink);
+  border-radius:25px;
+  animation: cineBeat 1.15s ease-in-out infinite;
+  box-shadow: 0 0 0 3px rgba(255,47,122,.12), 0 24px 90px rgba(255,47,122,.16);
+  pointer-events:none;
+}
+@keyframes cineBeat{
+  0%{ transform:scale(1); opacity:.88 }
+  50%{ transform:scale(1.045); opacity:.35 }
+  100%{ transform:scale(1); opacity:.88 }
+}
 
-      font-weight: 1000;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-      line-height: 1.1;
-      font-size: clamp(18px, 3.8vw, 52px);
+.orbit{ position:absolute; inset:0; pointer-events:none; }
+.orbit span{
+  position:absolute;
+  width:10px; height:10px;
+  background: linear-gradient(180deg, var(--pink), var(--pink2));
+  border-radius:50%;
+  left:50%; top:50%;
+  transform: translate(-50%,-50%);
+  animation: cineOrbit 6s linear infinite;
+  filter: drop-shadow(0 12px 18px rgba(255,47,122,.20));
+  opacity:.95;
+}
+.orbit span:nth-child(1){ animation-delay:0s; }
+.orbit span:nth-child(2){ animation-delay:1s; }
+.orbit span:nth-child(3){ animation-delay:2s; }
+.orbit span:nth-child(4){ animation-delay:3s; }
+.orbit span:nth-child(5){ animation-delay:4s; }
+.orbit span:nth-child(6){ animation-delay:5s; }
+@keyframes cineOrbit{
+  0%{ transform: translate(-50%,-50%) rotate(0deg) translateX(180px) rotate(0deg); }
+  100%{ transform: translate(-50%,-50%) rotate(360deg) translateX(180px) rotate(-360deg); }
+}
 
-      background-image: linear-gradient(90deg, #ff2f7a, #ff7db4, #7a4dff, #ff2f7a);
-      background-size: 320% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+.cineStamp{
+  position:absolute;
+  bottom:18px;
+  left:18px;
+  padding:10px 14px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(255,47,122,.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 22px 80px rgba(0,0,0,.55);
+  font-weight:1000;
+  letter-spacing:.12em;
+  text-transform: uppercase;
+  transform: scale(0) rotate(-8deg);
+  transform-origin: left bottom;
+  transition: transform .38s cubic-bezier(.2,.9,.2,1);
+  pointer-events:none;
+}
+.showStamp{ transform: scale(1) rotate(-8deg); }
 
-      filter:
-        drop-shadow(0 0 10px rgba(255,47,122,.55))
-        drop-shadow(0 0 70px rgba(122,77,255,.28));
-      animation: stampGlow 1.25s ease-in-out infinite alternate, gradMove2 2.8s linear infinite;
-    }
-    @keyframes gradMove2{ 0%{background-position:0% 50%} 100%{background-position:320% 50%} }
-    @keyframes stampGlow{
-      from{ filter: drop-shadow(0 0 10px rgba(255,47,122,.45)) drop-shadow(0 0 50px rgba(122,77,255,.22)); }
-      to{ filter: drop-shadow(0 0 18px rgba(255,47,122,.70)) drop-shadow(0 0 100px rgba(122,77,255,.32)); }
-    }
+.cineRight{
+  padding:40px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:12px;
+  min-height:0;
+}
+.cineTitle{
+  font-size: clamp(22px, 2.8vw, 34px);
+  font-weight:1000;
+  letter-spacing:-.02em;
+}
+.cineMsgBox{
+  border-radius: 20px;
+  padding: 16px;
+  line-height:1.6;
+  font-size: 16px;
+  color: rgba(20,20,20,.92);
+  min-height: 180px;
+  overflow-y:auto;
+  scroll-behavior:smooth;
+  white-space: pre-wrap;
+  background:
+    radial-gradient(1200px 500px at 10% 0%, rgba(255,125,180,.18), transparent 60%),
+    radial-gradient(1200px 500px at 90% 0%, rgba(122,77,255,.16), transparent 60%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,.92) 0px,
+      rgba(255,255,255,.92) 26px,
+      rgba(255,240,248,.92) 27px
+    );
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+}
+.cineSig{
+  margin-top: 6px;
+  font-size: 22px;
+  font-weight:1000;
+  opacity:0;
+  transition: opacity .9s ease;
+  background: linear-gradient(90deg, var(--pink), var(--pink2), var(--violet));
+  -webkit-background-clip:text; background-clip:text;
+  color: transparent;
+  filter: drop-shadow(0 0 18px rgba(255,47,122,.18));
+}
+.showSig{ opacity:1; }
 
-    .stampSub{
-      margin-top: 10px;
-      font-weight: 950;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      font-size: 12px;
-      color: rgba(255,255,255,.82);
-      opacity:0;
-      transform: translateY(8px);
-    }
-    .stampSub.show{
-      animation: subIn 420ms ease both;
-      animation-delay: 220ms;
-    }
-    @keyframes subIn{ to{ opacity:1; transform: translateY(0); } }
-
-    .polaroid{
-      width:min(720px, 92vw);
-      border-radius: 26px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
-      box-shadow: 0 26px 120px rgba(0,0,0,.72);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      overflow:hidden;
-
-      opacity:0;
-      transform: translateY(20px) scale(.96);
-    }
-    .polaroid.show{
-      animation: polaroidIn 760ms cubic-bezier(.12,.92,.2,1.02) both;
-      animation-delay: 240ms;
-    }
-    @keyframes polaroidIn{
-      0%{ opacity:0; transform: translateY(22px) scale(.94) rotate(1.2deg); }
-      55%{ opacity:1; transform: translateY(0) scale(1.02) rotate(0deg); }
-      100%{ opacity:1; transform: translateY(0) scale(1) rotate(0deg); }
-    }
-    .polaroidImg{ height: min(46vh, 360px); background: rgba(0,0,0,.15); }
-    .polaroidImg img{ width:100%; height:100%; object-fit: cover; display:block; transform: scale(1.02); }
-    .polaroidText{ padding: 14px 16px 16px; color: rgba(255,255,255,.92); }
-    .pTitle{ font-weight: 1000; letter-spacing: -.02em; font-size: clamp(16px, 2.6vw, 26px); }
-    .pLine{ margin-top: 6px; font-size: 14px; color: rgba(255,255,255,.80); }
-    .pSmall{
-      margin-top: 10px;
-      font-size: 12px;
-      letter-spacing:.14em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,.62);
-    }
-
-    .secretBtn{
-      border:1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.20);
-      color: rgba(255,255,255,.92);
-      padding: 12px 14px;
-      border-radius: 999px;
-      font-weight: 950;
-      cursor:pointer;
-      box-shadow: 0 18px 70px rgba(0,0,0,.45);
-      opacity:0;
-      transform: translateY(10px);
-    }
-    .secretBtn.show{
-      animation: btnIn 420ms ease both;
-      animation-delay: 720ms;
-    }
-    @keyframes btnIn{ to{ opacity:1; transform: translateY(0); } }
-    .secretBtn:active{ transform: translateY(2px); }
-
-  
-    /* ===== ULTRA FINALE ADD-ONS ===== */
-    .polaroidImg{ position:relative; }
-    .ring{
-      position:absolute; left:50%; top:50%;
-      width: 220px; height: 220px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.16);
-      transform: translate(-50%,-50%) scale(.86);
-      opacity:0;
-      filter: drop-shadow(0 0 80px rgba(255,47,122,.18));
-      animation: ringPulse 1.15s ease-out infinite;
-      pointer-events:none;
-    }
-    .ring.show{ opacity:1; }
-    @keyframes ringPulse{
-      0%{ transform: translate(-50%,-50%) scale(.82); opacity:.55; }
-      100%{ transform: translate(-50%,-50%) scale(1.14); opacity:0; }
-    }
-    .orbit{
-      position:absolute; inset:0;
-      pointer-events:none;
-      opacity:0;
-      transition: opacity .35s ease;
-    }
-    .orbit.show{ opacity:1; }
-    .orb{
-      position:absolute; left:50%; top:50%;
-      width: 10px; height: 10px;
-      transform: translate(-50%,-50%) rotate(var(--a)) translateX(var(--r)) rotate(calc(var(--a) * -1));
-      border-radius: 999px;
-      background: linear-gradient(180deg, rgba(255,47,122,.95), rgba(255,125,180,.90));
-      filter: drop-shadow(0 10px 24px rgba(255,47,122,.24));
-      animation: orbitSpin 3.1s linear infinite;
-    }
-    @keyframes orbitSpin{
-      from{ transform: translate(-50%,-50%) rotate(var(--a)) translateX(var(--r)) rotate(calc(var(--a) * -1)); }
-      to{ transform: translate(-50%,-50%) rotate(calc(var(--a) + 360deg)) translateX(var(--r)) rotate(calc((var(--a) + 360deg) * -1)); }
-    }
-    .finaleType{
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.16);
-      color: rgba(255,255,255,.90);
-      font-size: 14px;
-      line-height: 1.55;
-      max-height: 160px;
-      overflow:auto;
-      white-space: pre-wrap;
-    }
-    .finaleType b{
-      background: linear-gradient(90deg, rgba(255,47,122,.28), rgba(255,125,180,.20), rgba(122,77,255,.22));
-      border-radius: 10px;
-      padding: 1px 6px;
-    }
-    .sig{
-      margin-top: 10px;
-      font-family: ui-serif, "Brush Script MT", "Segoe Script", "Apple Chancery", cursive;
-      font-size: 30px;
-      font-weight: 900;
-      color: rgba(255,255,255,.92);
-      filter: drop-shadow(0 0 18px rgba(255,47,122,.18));
-      opacity:0;
-      transform: translateY(6px);
-      transition: opacity .4s ease, transform .4s ease;
-      text-align:right;
-    }
-    .sig.show{ opacity:1; transform: translateY(0); }
-
+.cineBtns{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
   </style>
 </head>
 
@@ -1036,6 +974,44 @@
     </div>
   </div>
 
+
+<!-- ===== FINAL CINEMATIC ===== -->
+<div class="overlay" id="finalCine" aria-hidden="true">
+  <div class="cineWrap" role="dialog" aria-modal="true">
+
+    <div class="cineFlash" id="cineFlash"></div>
+
+    <div class="cineLeft">
+      <div class="cineFrame">
+        <img src="noi.jpg" alt="Noi doi (cinematic)" id="cineImg">
+        <div class="cineRing"></div>
+
+        <div class="orbit" aria-hidden="true">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
+
+        <div class="cineStamp" id="cineStamp">SIGNED &amp; SEALED ✅</div>
+      </div>
+
+      <div class="cineBtns">
+        <button class="btn2" id="cineReplay">⟲ Replay</button>
+        <button class="btn2" id="cineSecret">🔓 Open secret</button>
+        <button class="btn2" id="cineClose">✖ Close</button>
+      </div>
+    </div>
+
+    <div class="cineRight">
+      <div class="cineTitle" id="cineTitle">Gata. E oficial. 💍</div>
+      <div class="cineMsgBox" id="cineMsgBox">
+        <span id="cineTyped"></span><span class="typingCursor" id="cineCursor"></span>
+      </div>
+      <div class="cineSig" id="cineSig">— Andreea</div>
+    </div>
+
+  </div>
+</div>
+
   <script>
     const NAME = "Andreea";
 
@@ -1115,142 +1091,6 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
 
     const eq = document.getElementById("eq");
     const ctx2d = eq.getContext("2d");
-
-
-    // ===== FINAL CINEMATIC (after accept) =====
-    const finale = document.getElementById("finale");
-    const finaleFlash = document.getElementById("finaleFlash");
-    const stamp = document.getElementById("stamp");
-    const stampSub = document.getElementById("stampSub");
-    const polaroid = document.getElementById("polaroid");
-    const secretBtnFinale = document.getElementById("secretBtn");
-    const pTitle = document.getElementById("pTitle");
-    const pLine  = document.getElementById("pLine");
-    const pSmall = document.getElementById("pSmall");
-
-    // sync finale text with NAME
-    if(stampSub) stampSub.textContent = `LOCKED IN: ${NAME.toUpperCase()} 💖`;
-    if(pTitle)  pTitle.textContent = `Happy Valentine ${NAME}`;
-    if(pLine)   pLine.textContent  = "Te aleg in fiecare zi. ❤️";
-    if(pSmall)  pSmall.textContent = "Saved in my heart • forever";
-
-    function runFinale(){
-      if(!finale) return;
-
-      const ring = document.getElementById("ring");
-      const orbit = document.getElementById("orbit");
-      const finaleType = document.getElementById("finaleType");
-      const sig = document.getElementById("sig");
-
-      // build orbit dots
-      if(orbit){
-        orbit.innerHTML = "";
-        const dots = 10;
-        for(let i=0;i<dots;i++){
-          const d = document.createElement("div");
-          d.className = "orb";
-          d.style.setProperty("--a", (i*(360/dots)) + "deg");
-          d.style.setProperty("--r", (86 + (i%3)*10) + "px");
-          orbit.appendChild(d);
-        }
-      }
-
-      // sync text
-      if(stampSub) stampSub.textContent = `LOCKED IN: ${NAME.toUpperCase()} 💖`;
-      if(pTitle)  pTitle.textContent = `Happy Valentine ${NAME}`;
-      if(pLine)   pLine.textContent  = "Te aleg in fiecare zi. ❤️";
-      if(pSmall)  pSmall.textContent = "Saved in my heart • forever";
-
-      // reset
-      if(ring) ring.classList.remove("show");
-      if(orbit) orbit.classList.remove("show");
-      if(finaleType) finaleType.textContent = "";
-      if(sig){
-        sig.classList.remove("show");
-        sig.textContent = `— ${NAME}`;
-      }
-
-      setPauseFX(true);
-      finale.classList.add("show");
-      finale.setAttribute("aria-hidden","false");
-
-      // flash
-      if(finaleFlash){
-        finaleFlash.classList.remove("fire");
-        void finaleFlash.offsetWidth;
-        finaleFlash.classList.add("fire");
-      }
-
-      // restart animations
-      if(stamp) stamp.classList.remove("show");
-      if(stampSub) stampSub.classList.remove("show");
-      if(polaroid) polaroid.classList.remove("show");
-      if(secretBtn) secretBtn.classList.remove("show");
-
-      requestAnimationFrame(() => {
-        if(stamp) stamp.classList.add("show");
-        setTimeout(() => { if(stampSub) stampSub.classList.add("show"); }, 300);
-        setTimeout(() => { if(polaroid) polaroid.classList.add("show"); }, 220);
-        setTimeout(() => { if(secretBtn) secretBtn.classList.add("show"); }, 740);
-
-        setTimeout(() => { if(ring) ring.classList.add("show"); }, 520);
-        setTimeout(() => { if(orbit) orbit.classList.add("show"); }, 560);
-        setTimeout(() => { launchConfetti(); }, 620);
-      });
-
-      showLockedBadge();
-      toast("OFFICIAL ✅");
-
-      // typewriter final message
-      const finalText =
-        "Am apasat pe bifa aia ca sa fie oficial.\\n\\n" +
-        "De acum: noi.\\n" +
-        `Te iubesc, ${NAME}.\\n\\n` +
-        "Promit sa fiu mai bun, mai prezent, mai atent.\\n\\n" +
-        "LOCKED FOREVER. 💖";
-
-      if(finaleType){
-        let i = 0;
-        const tick = () => {
-          i++;
-          finaleType.textContent = finalText.slice(0, i);
-          finaleType.scrollTop = finaleType.scrollHeight;
-
-          if(i < finalText.length){
-            let d = 14;
-            const ch = finalText[i-1];
-            if(ch === "\\n") d = 90;
-            if([",",".","!","?","…"].includes(ch)) d = 120;
-            setTimeout(tick, d);
-          }else{
-            setTimeout(()=>{ if(sig) sig.classList.add("show"); }, 250);
-          }
-        };
-        setTimeout(tick, 900);
-      }
-    }
-
-    // click anywhere closes finale
-    if(finale){
-      finale.addEventListener("click", () => {
-        finale.classList.remove("show");
-        finale.setAttribute("aria-hidden","true");
-        setPauseFX(false);
-      });
-    }
-
-    // secret button inside finale
-    if(secretBtnFinale){
-      secretBtnFinale.addEventListener("click", (e) => {
-        e.stopPropagation();
-        toast("Secret unlocked ✨");
-        try{
-          secretNote.classList.add("show");
-          setTimeout(()=> secretNote.classList.remove("show"), 2400);
-        }catch(_){}
-      });
-    }
-
 
     // Personalize
     document.getElementById("nameSpan").textContent = NAME;
@@ -1575,19 +1415,145 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
       });
     });
 
-    // Checkbox
-    finalCheck.addEventListener("change", ()=>{
-      if(finalCheck.checked){
-        finalStatus.textContent = "Locked forever 🔒 (contract accepted)";
-        showLockedBadge();
-        toast("Contract accepted ✅");
-        runFinale();
-      }else{
-        finalStatus.textContent = "";
-      }
-    });
+// ===== FINAL CINEMATIC =====
+const finalCine = document.getElementById("finalCine");
+const cineFlash = document.getElementById("cineFlash");
+const cineImg = document.getElementById("cineImg");
+const cineStamp = document.getElementById("cineStamp");
+const cineTitle = document.getElementById("cineTitle");
+const cineMsgBox = document.getElementById("cineMsgBox");
+const cineTyped = document.getElementById("cineTyped");
+const cineCursor = document.getElementById("cineCursor");
+const cineSig = document.getElementById("cineSig");
 
-// Stage
+const cineReplay = document.getElementById("cineReplay");
+const cineClose = document.getElementById("cineClose");
+const cineSecret = document.getElementById("cineSecret");
+
+const FINAL_MESSAGE = `Gata.\nAm facut-o oficial.\n\nCand ai bifat, ai semnat.\nSi eu… te aleg. Mereu.\n\nTe iubesc, ${NAME}. ❤️`;
+
+function typeFinal(text){
+  cineTyped.textContent = "";
+  cineSig.classList.remove("showSig");
+  cineCursor.style.display = "inline-block";
+
+  let i = 0;
+  const tick = ()=>{
+    if(i >= text.length){
+      cineCursor.style.display = "none";
+      cineSig.classList.add("showSig");
+      return;
+    }
+    cineTyped.textContent += text[i++];
+    cineMsgBox.scrollTop = cineMsgBox.scrollHeight;
+
+    const ch = text[i-1];
+    let d = 26;
+    if(ch === " ") d = 14;
+    if(ch === "\n") d = 120;
+    if([",",".","!","?","…",":",";"].includes(ch)) d = 150;
+
+    setTimeout(tick, d);
+  };
+  tick();
+}
+
+function openFinalCine(){
+  setPauseFX(true);
+  finalCine.classList.add("show");
+  finalCine.setAttribute("aria-hidden","false");
+
+  cineTitle.textContent = "Gata. E oficial. 💍";
+  cineImg.classList.remove("zoomIn");
+  cineStamp.classList.remove("showStamp");
+  cineFlash.classList.remove("flashAnim");
+  cineSig.classList.remove("showSig");
+
+  // premium flash
+  cineFlash.classList.add("flashAnim");
+  setTimeout(()=>cineFlash.classList.remove("flashAnim"), 420);
+
+  // cinematic zoom + stamp
+  setTimeout(()=>cineImg.classList.add("zoomIn"), 180);
+  setTimeout(()=>cineStamp.classList.add("showStamp"), 520);
+
+  launchConfetti();
+  toast("Signed & sealed ✅");
+
+  // typewriter with existing highlights helper
+  // (we reuse applyHighlights to keep your vibe consistent)
+  setTimeout(()=>{
+    typeFinal(""); // reset cursor
+    // use existing applyHighlights
+    cineTyped.innerHTML = "";
+    cineCursor.style.display = "inline-block";
+
+    // progressive typing into a buffer, then highlight at end
+    let raw = "";
+    let i = 0;
+    const t = FINAL_MESSAGE;
+
+    const step = ()=>{
+      if(i >= t.length){
+        cineTyped.innerHTML = applyHighlights(raw);
+        cineCursor.style.display = "none";
+        cineSig.classList.add("showSig");
+        return;
+      }
+      raw += t[i++];
+      cineTyped.textContent = raw; // keep it fast while typing
+      cineMsgBox.scrollTop = cineMsgBox.scrollHeight;
+
+      const ch = raw[raw.length-1];
+      let d = 26;
+      if(ch === " ") d = 14;
+      if(ch === "\n") d = 120;
+      if([",",".","!","?","…",":",";"].includes(ch)) d = 150;
+      setTimeout(step, d);
+    };
+    step();
+  }, 720);
+}
+
+function closeFinalCine(){
+  finalCine.classList.remove("show");
+  finalCine.setAttribute("aria-hidden","true");
+  setPauseFX(false);
+  cineImg.classList.remove("zoomIn");
+  cineStamp.classList.remove("showStamp");
+  cineSig.classList.remove("showSig");
+  cineCursor.style.display = "none";
+  toast(`Locked in: ${NAME} 💖`);
+}
+
+cineClose.addEventListener("click", closeFinalCine);
+finalCine.addEventListener("click",(e)=>{ if(e.target===finalCine) closeFinalCine(); });
+
+cineReplay.addEventListener("click", ()=>{
+  toast("Replay ✨");
+  openFinalCine();
+});
+
+cineSecret.addEventListener("click", ()=>{
+  // reuse your existing secretNote behavior, but make it a little extra
+  secretNote.classList.add("show");
+  toast("Secret unlocked ❤️");
+  setTimeout(()=>secretNote.classList.remove("show"), 2200);
+});
+
+
+    // Checkbox
+finalCheck.addEventListener("change", ()=>{
+  if(finalCheck.checked){
+    finalStatus.textContent = "";
+    openFinalCine();
+    showLockedBadge();
+  }else{
+    finalStatus.textContent = "";
+  }
+});
+
+    // Stage
     async function runStage(){
       setPauseFX(true);
       stage.classList.add("show");
@@ -1746,43 +1712,11 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
     // ESC closes overlay
     window.addEventListener("keydown",(e)=>{
       if(e.key==="Escape"){
-        if(finale.classList.contains("show")){ finale.classList.remove("show"); finale.setAttribute("aria-hidden","true"); setPauseFX(false); }
-
         if(overlay.classList.contains("show")) closeRevealOverlay();
         if(quizOverlay.classList.contains("show")) closeQuiz();
+        if(finalCine.classList.contains("show")) closeFinalCine();
       }
     });
   </script>
-
-  <!-- FINAL CINEMATIC -->
-  <div class="finale" id="finale" aria-hidden="true">
-    <div class="finaleFlash" id="finaleFlash"></div>
-
-    <div class="finaleWrap">
-      <div class="stamp" id="stamp">
-        <div class="stampInner">OFFICIALLY MY VALENTINE ✅</div>
-        <div class="stampSub" id="stampSub">LOCKED IN: ANDREEA 💖</div>
-      </div>
-
-      <div class="polaroid" id="polaroid">
-        <div class="polaroidImg">
-          <img src="noi.jpg" alt="Noi doi">
-        
-          <div class="ring" id="ring"></div>
-          <div class="orbit" id="orbit"></div>
-</div>
-        <div class="polaroidText">
-          <div class="pTitle" id="pTitle">Happy Valentine Andreea</div>
-          <div class="pLine" id="pLine">Te aleg in fiecare zi. ❤️</div>
-          <div class="pSmall" id="pSmall">Saved in my heart • forever</div>
-          <div class="finaleType" id="finaleType"></div>
-          <div class="sig" id="sig">—</div>
-        </div>
-      </div>
-
-      <button class="secretBtn" id="secretBtn" type="button">Open secret ✨</button>
-    </div>
-  </div>
-
 </body>
 </html>
