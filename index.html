@@ -1876,13 +1876,24 @@ const breakTakeoverClose = document.getElementById("breakTakeoverClose");
 const breakTakeoverBack = document.getElementById("breakTakeoverBack");
 const breakTakeoverPromise = document.getElementById("breakTakeoverPromise");
 const breakSmall = document.getElementById("breakSmall");
+    
+const BREAK_MESSAGE = `Dacă vreodată ajungem într-un punct în care lucrurile nu mai merg...
 
-const BREAK_LINES = [
-  "Dacă vreodată ne pierdem…\nnu vreau să plecăm din orgoliu.",
-  "Dacă vreodată ne certăm…\nvreau să ne amintim de început.",
-  "Dacă vreodată ne răcim…\nvreau să știi: eu încă aleg «noi».",
-  "Și dacă într-o zi pare final…\nnu e. E doar un capitol greu."
-];
+Sper să nu plecăm din orgoliu.
+Sper să nu uităm cât am luptat.
+Sper să ne amintim cum a fost la început.
+
+Și dacă într-o zi drumurile noastre chiar se despart,
+vreau să știi un lucru:
+
+Nu se vor despărți niciodată.
+NICI.
+O.
+DATĂ.
+
+Ce să vezi?
+Rămân.`;
+
 
 function setVolSmooth(to){
   try{
@@ -1898,10 +1909,8 @@ function setVolSmooth(to){
 }
 
 function openBreakTakeover(){
-  // închide orice overlay care ar putea fi peste
-  try{ overlay.classList.remove("show"); }catch(e){}
-  try{ quizOverlay.classList.remove("show"); }catch(e){}
-  try{ finalCine.classList.remove("show"); }catch(e){}
+  // NU închide overlay-ul mare — breakBtn e în el și vrei să rămâi acolo
+  // doar pune takeover-ul peste
 
   setPauseFX(true);
   document.body.classList.add("breakMode");
@@ -1910,12 +1919,9 @@ function openBreakTakeover(){
   breakTakeover.classList.add("show");
   breakTakeover.setAttribute("aria-hidden","false");
 
-  breakSmall.textContent = BREAK_LINES[Math.floor(Math.random()*BREAK_LINES.length)];
-
-  // audio mai încet
+  typeBreakTakeover(BREAK_MESSAGE);
   setVolSmooth(0.18);
 
-  // micro “shake”
   try{
     document.body.animate(
       [{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],
@@ -1925,6 +1931,28 @@ function openBreakTakeover(){
 
   toast("Safe mode 🤍");
 }
+
+    function typeBreakTakeover(text){
+  breakSmall.textContent = "";
+  let i = 0;
+
+  function step(){
+    if(i >= text.length) return;
+
+    breakSmall.textContent += text[i++];
+    const ch = text[i-1];
+
+    let d = 22;
+    if(ch === " ") d = 10;
+    if(ch === "\n") d = 120;
+    if([",",".","!","?","…",":",";"].includes(ch)) d = 150;
+
+    setTimeout(step, d);
+  }
+
+  step();
+}
+
 
 function closeBreakTakeover(){
   document.body.classList.remove("breakMode");
@@ -1936,10 +1964,6 @@ function closeBreakTakeover(){
   setPauseFX(false);
   setVolSmooth(0.85);
 }
-
-breakBtn.addEventListener("click", openBreakTakeover);
-breakTakeoverClose.addEventListener("click", closeBreakTakeover);
-breakTakeoverBack.addEventListener("click", ()=>{ toast("Back to us 💖"); closeBreakTakeover(); });
 
 breakTakeoverPromise.addEventListener("click", ()=>{
   toast("I still choose you 🤍");
@@ -1988,6 +2012,22 @@ breakTakeover.addEventListener("click", (e)=>{
       if(!stopTyping) typedEl.innerHTML = applyHighlights(text);
       cursorEl.style.display = "none";
     }
+
+    breakBtn.addEventListener("click", openBreakTakeover);
+
+breakTakeoverClose.addEventListener("click", closeBreakTakeover);
+
+breakTakeoverBack.addEventListener("click", ()=>{
+  toast("Back to us 💖");
+  closeBreakTakeover();
+});
+
+breakTakeoverPromise.addEventListener("click", ()=>{
+  toast("I still choose you 🤍");
+  launchConfetti();
+  closeBreakTakeover();
+});
+
 
     // Overlays open/close
     function openRevealOverlay(){
@@ -2778,6 +2818,7 @@ if(now.getTime() < target.getTime()){
   </script>
 </body>
 </html>
+
 
 
 
