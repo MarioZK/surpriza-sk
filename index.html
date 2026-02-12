@@ -1137,10 +1137,12 @@
       pointer-events:none;
     }
     .lockFlash.flash{ animation: cineFlash 0.4s ease; }
-    body.breakMode{
+body.breakMode .beatGlow,
+body.breakMode .hearts{
   filter: grayscale(1) contrast(1.05);
   transition: filter .4s ease;
 }
+
 
   </style>
 </head>
@@ -1785,11 +1787,10 @@ function typeBreak(text){
 
 function openBreak(){
   document.body.classList.add("breakMode");
-  setPauseFX(true);
   breakOverlay.classList.add("show");
   breakOverlay.setAttribute("aria-hidden","false");
 
-  // fade audio (optional)
+  // fade audio
   try{
     const startVol = audio.volume;
     const to = Math.min(0.22, startVol);
@@ -1810,21 +1811,21 @@ function closeBreak(){
   document.body.classList.remove("breakMode");
   breakOverlay.classList.remove("show");
   breakOverlay.setAttribute("aria-hidden","true");
-  setPauseFX(false);
 
-  // restore volume (optional)
+  // restore volume to slider
   try{
-    const to = 0.85;
+    const targetVol = Math.max(0, Math.min(1, vol.value/100));
     const startVol = audio.volume;
     const steps = 12;
     let k = 0;
     const t = setInterval(()=>{
       k++;
-      audio.volume = startVol + (to - startVol) * (k/steps);
+      audio.volume = startVol + (targetVol - startVol) * (k/steps);
       if(k>=steps) clearInterval(t);
     }, 40);
   }catch(e){}
 }
+
 
 breakBtn.addEventListener("click", openBreak);
 breakClose.addEventListener("click", closeBreak);
@@ -2663,6 +2664,7 @@ if(now.getTime() < target.getTime()){
   </script>
 </body>
 </html>
+
 
 
 
