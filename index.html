@@ -2048,15 +2048,109 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
         freezeAll(false);
       }
 
-      function unlockNow(){
-        lockFlash.classList.add("flash");
-        setTimeout(()=>lockFlash.classList.remove("flash"), 420);
-        try{ launchConfetti(); }catch(e){}
-        try{ toast("Unlocked 💘"); }catch(e){}
-        hideLock();
-      }
+function unlockNow(){
 
-            const PASS = "mariosefumeu";
+  lockFlash.classList.add("flash");
+  setTimeout(()=>lockFlash.classList.remove("flash"), 420);
+
+  const fake = document.createElement("div");
+  fake.style.position = "fixed";
+  fake.style.inset = "0";
+  fake.style.display = "flex";
+  fake.style.alignItems = "center";
+  fake.style.justifyContent = "center";
+  fake.style.background = "radial-gradient(circle at center, #001a0f, #000)";
+  fake.style.color = "#00ff99";
+  fake.style.fontSize = "clamp(28px,5vw,60px)";
+  fake.style.fontWeight = "1000";
+  fake.style.letterSpacing = ".08em";
+  fake.style.zIndex = "9999";
+  fake.style.textShadow = "0 0 20px #00ff99, 0 0 60px #00ff99";
+
+  document.body.appendChild(fake);
+
+  const text = "ACCESS GRANTED ✅";
+  let i = 0;
+
+  function type(){
+    if(i < text.length){
+      fake.textContent += text[i];
+      i++;
+
+      let delay = 50;
+      if(text[i-1] === " ") delay = 30;
+      if(text[i-1] === "✅") delay = 200;
+
+      setTimeout(type, delay);
+    } else {
+      // mic zoom cinematic
+      document.body.style.transition = "transform .3s ease";
+      document.body.style.transform = "scale(1.02)";
+
+      setTimeout(()=>{
+        document.body.style.transform = "scale(1)";
+        fake.remove();
+        hideLock();
+        launchConfetti();
+        toast("Unlocked 💘");
+      }, 700);
+    }
+  }
+
+  type();
+}
+
+      function wrongPasswordAnimation(){
+
+  const fail = document.createElement("div");
+  fail.style.position = "fixed";
+  fail.style.inset = "0";
+  fail.style.display = "flex";
+  fail.style.alignItems = "center";
+  fail.style.justifyContent = "center";
+  fail.style.background = "radial-gradient(circle at center, #2a0000, #000)";
+  fail.style.color = "#ff2f2f";
+  fail.style.fontSize = "clamp(28px,5vw,60px)";
+  fail.style.fontWeight = "1000";
+  fail.style.letterSpacing = ".08em";
+  fail.style.zIndex = "9999";
+  fail.style.textShadow = "0 0 20px #ff0000, 0 0 60px #ff0000";
+
+  document.body.appendChild(fail);
+
+  const text = "ACCESS DENIED ❌";
+  let i = 0;
+
+  function type(){
+    if(i < text.length){
+      fail.textContent += text[i];
+      i++;
+      setTimeout(type, 45);
+    } else {
+
+      // screen shake
+      document.body.animate(
+        [
+          { transform: "translateX(0)" },
+          { transform: "translateX(-8px)" },
+          { transform: "translateX(8px)" },
+          { transform: "translateX(-6px)" },
+          { transform: "translateX(6px)" },
+          { transform: "translateX(0)" }
+        ],
+        { duration: 350, easing: "ease-out" }
+      );
+
+      setTimeout(()=>{
+        fail.remove();
+      }, 900);
+    }
+  }
+
+  type();
+}
+
+            const PASS = "marioregelemeu";
       const UNLOCK_KEY = "valentine_unlocked_v1";
 
       function doUnlockByPassword(){
@@ -2071,7 +2165,8 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
           try{ localStorage.setItem(UNLOCK_KEY, "1"); }catch(e){}
           unlockNow();
         }else{
-          lockPassMsg.textContent = "Parolă greșită 🙈";
+lockPassMsg.textContent = "";
+wrongPasswordAnimation();
           try{ lockPassInput.animate(
             [{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],
             {duration:260, easing:"ease-out"}
@@ -2156,5 +2251,6 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
   </script>
 </body>
 </html>
+
 
 
