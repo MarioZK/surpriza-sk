@@ -2150,29 +2150,52 @@ function unlockNow(){
   type();
 }
 
-            const PASS = "marioregelemeu";
-      const UNLOCK_KEY = "valentine_unlocked_v1";
+const PASS_REAL  = "marioregelemeu";
+const PASS_TROLL = "marioteiubesc";
+const UNLOCK_KEY = "valentine_unlocked_v1";
 
-      function doUnlockByPassword(){
-        const v = (lockPassInput.value || "").trim().toLowerCase();
-        if(!v){
-          lockPassMsg.textContent = "Scrie parola 😏";
-          return;
-        }
 
-        if(v === PASS){
-          lockPassMsg.textContent = "Perfect ✅ Deblocat!";
-          try{ localStorage.setItem(UNLOCK_KEY, "1"); }catch(e){}
-          unlockNow();
-        }else{
-lockPassMsg.textContent = "";
-wrongPasswordAnimation();
-          try{ lockPassInput.animate(
-            [{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],
-            {duration:260, easing:"ease-out"}
-          ); }catch(e){}
-        }
-      }
+function doUnlockByPassword(){
+  const v = (lockPassInput.value || "").trim().toLowerCase();
+
+  if(!v){
+    lockPassMsg.textContent = "Scrie parola 😏";
+    return;
+  }
+
+  // ✅ parola REALA
+  if(v === PASS_REAL){
+    lockPassMsg.textContent = "";
+    try{ localStorage.setItem(UNLOCK_KEY, "1"); }catch(e){}
+    unlockNow();
+    return;
+  }
+
+  // 😈 parola TROLL
+  if(v === PASS_TROLL){
+    lockPassMsg.textContent = "";
+    trollLoading99();
+    lockPassInput.value = "";
+    return;
+  }
+
+  // ❌ parola gresita
+  lockPassMsg.textContent = "";
+  wrongPasswordAnimation();
+
+  try{
+    lockPassInput.animate(
+      [
+        {transform:"translateX(0)"},
+        {transform:"translateX(-6px)"},
+        {transform:"translateX(6px)"},
+        {transform:"translateX(0)"}
+      ],
+      {duration:260, easing:"ease-out"}
+    );
+  }catch(e){}
+}
+
 
       lockPassBtn.addEventListener("click", doUnlockByPassword);
       lockPassInput.addEventListener("keydown", (e)=>{
