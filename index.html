@@ -865,7 +865,7 @@
 
     <div class="headline">
       <h1>Will you be my Valentine, <span class="gradientName" id="nameSpan">Andreea</span>? 💘</h1>
-      <p class="sub">Press <b>YES</b> five times… and unlock the love letter ✨</p>
+      <p class="sub">Apasa <b>YES</b> de 5 ori… si vei avea o surpriza ✨</p>
     </div>
 
     <div class="progressWrap">
@@ -932,9 +932,9 @@
         </div>
 
         <div class="timeline">
-          <span>First date</span>
-          <span>First kiss</span>
-          <span>Today</span>
+          <span>Te iubesc</span>
+          <span>Cel mai</span>
+          <span>Multttt <3</span>
         </div>
 
         <div class="controls">
@@ -947,7 +947,7 @@
       </div>
 
       <div class="modalRight">
-        <p class="ink" id="bigLine">For you, Andreea. Always. ❤️</p>
+        <p class="ink" id="bigLine">Thanks for choosing me ❤️</p>
 
         <div class="moods">
           <button class="moodBtn" data-mood="happy">😊 Happy</button>
@@ -1031,6 +1031,15 @@ Te iubesc printesica mea frumoasa. Te iubesc mai mult decat orgoliul meu, mai mu
 Si imi pare rau pentru tot. Pentru fiecare data cand te-am ranit, pentru fiecare moment in care am fost un muist de copil :(
 
 Nu vreau sa pierd ce avem. Nu vreau sa pierd pe singura fata care m-a facut sa simt ca pot iubi cu adevarat si care m-a ajutat sa trec peste TOT ce s-a intamplat lately in viata mea.
+
+Te iubesc. îți iubesc zâmbetul. îți iubesc râsul. îți iubesc ochii. îți iubesc vocea. îți iubesc atingerea. îți iubesc căldura. îți iubesc bunătatea. îți iubesc puterea. îți iubesc inima. îți iubesc visele. îți iubesc mintea. îți iubesc sufletul. îți iubesc prezența. îți iubesc răbdarea. îți iubesc sinceritatea. îți iubesc blândețea. îți iubesc curajul. 
+îți iubesc umorul. îți iubesc loialitatea. iti iubesc imaginația. îți iubesc inteligența. îți iubesc stilul. îți iubesc ambiția. îți iubesc energia. îți iubesc surprizele. îți iubesc surprizele. îți iubesc răbdarea. îți iubesc promisiunile. îți iubesc angajamentul de a fi orice pentru mine. îți iubesc încrederea. îți iubesc încurajarea. îți iubesc iertarea. îți iubesc loialitatea. îți iubesc curajul. îți iubesc iubirea.
+Te iubesc.
+Te iubesc pentru ce ești.
+Te iubesc pentru cine ești
+Te iubesc din prima noapte de când ne am cunoscut 
+am simțit ca tu ești persoana
+să te cunosc a fost cel mai bun lucru care a putut să mi se întâmple
 
 Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
 
@@ -1375,7 +1384,7 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
       launchConfetti();
 
       const extra =
-`\n\nPS: ${NAME}, raspunsurile tale mi-au placut.\n- Data: ${quizAnswers.date || "perfecta"}\n- Procent: ${quizAnswers.percent || "∞"}\n- Cand te vad, se intampla cu mine: "${quizAnswers.vibe || "totul"}"\n`;
+`\n\nPS: ${NAME}, raspunsurile tale mi-au placut.\n- Data: ${quizAnswers.date || "perfecta"}\n- Procent: ${quizAnswers.percent || "∞"}\n- De cate ori vreau sa ne futem pe zi?: "${quizAnswers.vibe || "totul"}"\n`;
 
       typeMessage(MESSAGE + extra);
       toast("Surprise unlocked 💖");
@@ -1430,7 +1439,16 @@ const cineReplay = document.getElementById("cineReplay");
 const cineClose = document.getElementById("cineClose");
 const cineSecret = document.getElementById("cineSecret");
 
-const FINAL_MESSAGE = `Gata.\nAm facut-o oficial.\n\nCand ai bifat, ai semnat.\nSi eu… te aleg. Mereu.\n\nTe iubesc, ${NAME}. ❤️`;
+const FINAL_MESSAGE = `Nu e doar un checkbox.\n
+E o alegere.\n
+E asumare.\n
+E un “rămân”.\n
+Nu promit perfecțiune.\n
+Nu promit că nu greșesc.\n
+Dar promit că rămân.\n
+Și că te aleg,\n
+chiar și când e greu.\n
+Te iubesc, ${NAME}. ❤️`;
 
 function typeFinal(text){
   cineTyped.textContent = "";
@@ -1585,14 +1603,14 @@ finalCheck.addEventListener("change", ()=>{
     const questions = [
       {
         text: "In ce data ne-am pus impreuna?",
-        ph: "Scrie data… (orice scrii e corect 😏)",
-        hint: "Orice scrii e corect.",
+        ph: "Scrie data.. 😏",
+        hint: "NU AI HINT TREBUIE SA STII!",
         save: (v)=> quizAnswers.date = (v.trim() || "cea mai buna zi"),
         ok: ()=> `${NAME} mereu are dreptate 😌`
       },
       {
         text: "Cat de mult te iubesc de la 1 la 100%? (hint: intrebare capcana)",
-        ph: "Un numar intre 1 si 100…",
+        ph: "GANDESTE-TE BINE!",
         hint: "Capcana 😈",
         save: (v)=> quizAnswers.percent = (v.trim() || "∞"),
         ok: (v)=>{
@@ -1602,7 +1620,7 @@ finalCheck.addEventListener("change", ()=>{
         }
       },
       {
-        text: "Cand te vad, ce simti ca se intampla cu mine?",
+        text: "WOW, AI STIUT RASPUNSUL LA TOATE? De cate ori vreau sa ne futem intr-o zi?",
         ph: "Scrie orice…",
         hint: "Orice raspuns e corect.",
         save: (v)=> quizAnswers.vibe = (v.trim() || "totul"),
@@ -1659,10 +1677,10 @@ finalCheck.addEventListener("change", ()=>{
 
     // YES flow
     const yesLines = [
-      `${NAME}.exe accepted 💖`,
-      "You unlocked: forever mode 🔒",
-      "Ok… you're my person.",
-      "Again 😏",
+      `${NAME}.exe a acceptat 💖`,
+      "Ai acceptat: vom fii impreuna toata viata 🔒",
+      "Esti persoana mea favorita!!",
+      "WOW 😏",
       "Compatibility maxed ✅"
     ];
 
@@ -1720,3 +1738,4 @@ finalCheck.addEventListener("change", ()=>{
   </script>
 </body>
 </html>
+
