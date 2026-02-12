@@ -2150,6 +2150,136 @@ function unlockNow(){
   type();
 }
 
+
+      function trollLoading99(){
+  const wrap = document.createElement("div");
+  wrap.style.position = "fixed";
+  wrap.style.inset = "0";
+  wrap.style.display = "flex";
+  wrap.style.alignItems = "center";
+  wrap.style.justifyContent = "center";
+  wrap.style.background = "radial-gradient(circle at center, #001a0f, #000)";
+  wrap.style.zIndex = "9999";
+  wrap.style.padding = "16px";
+
+  const card = document.createElement("div");
+  card.style.width = "min(760px, 92vw)";
+  card.style.borderRadius = "26px";
+  card.style.border = "1px solid rgba(255,255,255,.16)";
+  card.style.background = "rgba(0,0,0,.35)";
+  card.style.backdropFilter = "blur(12px)";
+  card.style.boxShadow = "0 30px 140px rgba(0,0,0,.70)";
+  card.style.padding = "18px 18px 16px";
+  card.style.color = "rgba(255,255,255,.92)";
+
+  const title = document.createElement("div");
+  title.style.fontWeight = "1000";
+  title.style.letterSpacing = ".12em";
+  title.style.textTransform = "uppercase";
+  title.style.fontSize = "12px";
+  title.style.color = "rgba(255,255,255,.75)";
+  title.textContent = "SECURE CHANNEL";
+
+  const big = document.createElement("div");
+  big.style.marginTop = "10px";
+  big.style.fontSize = "clamp(26px,4.4vw,54px)";
+  big.style.fontWeight = "1000";
+  big.style.letterSpacing = ".08em";
+  big.style.color = "#00ff99";
+  big.style.textShadow = "0 0 20px #00ff99, 0 0 60px #00ff99";
+  big.textContent = "UNLOCKING…";
+
+  const sub = document.createElement("div");
+  sub.style.marginTop = "6px";
+  sub.style.fontSize = "14px";
+  sub.style.color = "rgba(255,255,255,.78)";
+  sub.textContent = "Verifying credentials…";
+
+  const barWrap = document.createElement("div");
+  barWrap.style.marginTop = "14px";
+  barWrap.style.height = "12px";
+  barWrap.style.borderRadius = "999px";
+  barWrap.style.background = "rgba(255,255,255,.10)";
+  barWrap.style.border = "1px solid rgba(255,255,255,.14)";
+  barWrap.style.overflow = "hidden";
+  barWrap.style.boxShadow = "inset 0 1px 0 rgba(255,255,255,.25)";
+
+  const bar = document.createElement("div");
+  bar.style.height = "100%";
+  bar.style.width = "0%";
+  bar.style.borderRadius = "999px";
+  bar.style.background = "linear-gradient(90deg, rgba(0,255,153,.95), rgba(77,255,208,.85), rgba(122,77,255,.75))";
+  bar.style.boxShadow = "0 14px 45px rgba(0,255,153,.18)";
+  bar.style.transition = "width .18s ease";
+
+  barWrap.appendChild(bar);
+
+  const row = document.createElement("div");
+  row.style.display = "flex";
+  row.style.justifyContent = "space-between";
+  row.style.alignItems = "center";
+  row.style.marginTop = "10px";
+  row.style.gap = "10px";
+
+  const pct = document.createElement("div");
+  pct.style.fontWeight = "1000";
+  pct.style.letterSpacing = ".06em";
+  pct.style.color = "rgba(255,255,255,.86)";
+  pct.textContent = "0%";
+
+  const hint = document.createElement("div");
+  hint.style.fontSize = "12px";
+  hint.style.letterSpacing = ".08em";
+  hint.style.color = "rgba(255,255,255,.65)";
+  hint.textContent = "Do not close this window.";
+
+  row.appendChild(hint);
+  row.appendChild(pct);
+
+  const troll = document.createElement("div");
+  troll.style.marginTop = "10px";
+  troll.style.fontSize = "13px";
+  troll.style.fontWeight = "900";
+  troll.style.color = "rgba(255,255,255,.78)";
+  troll.style.minHeight = "18px";
+
+  card.appendChild(title);
+  card.appendChild(big);
+  card.appendChild(sub);
+  card.appendChild(barWrap);
+  card.appendChild(row);
+  card.appendChild(troll);
+
+  wrap.appendChild(card);
+  document.body.appendChild(wrap);
+
+  let p = 0;
+
+  const timer = setInterval(()=>{
+    if(p < 92) p += 6 + Math.random()*6;
+    else if(p < 99) p += 0.25 + Math.random()*0.45;
+    else p = 99;
+
+    p = Math.min(99, p);
+    bar.style.width = p.toFixed(0) + "%";
+    pct.textContent = p.toFixed(0) + "%";
+
+    if(p >= 99){
+      sub.textContent = "Finalizing…";
+      troll.textContent = "Almost there… 😈";
+      clearInterval(timer);
+
+      setTimeout(()=>{
+        wrap.remove();
+        try{ toast("Hmm… ceva nu merge 🙈"); }catch(e){}
+      }, 1400);
+    }
+  }, 180);
+
+  wrap.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); });
+}
+
+      
 const PASS_REAL  = "marioregelemeu";
 const PASS_TROLL = "marioteiubesc";
 const UNLOCK_KEY = "valentine_unlocked_v1";
@@ -2274,6 +2404,7 @@ function doUnlockByPassword(){
   </script>
 </body>
 </html>
+
 
 
 
