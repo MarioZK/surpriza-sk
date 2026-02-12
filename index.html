@@ -2264,16 +2264,67 @@ function unlockNow(){
     bar.style.width = p.toFixed(0) + "%";
     pct.textContent = p.toFixed(0) + "%";
 
-    if(p >= 99){
-      sub.textContent = "Finalizing…";
-      troll.textContent = "Almost there… 😈";
-      clearInterval(timer);
+if(p >= 99){
+  clearInterval(timer);
 
-      setTimeout(()=>{
-        wrap.remove();
-        try{ toast("Hmm… ceva nu merge 🙈"); }catch(e){}
-      }, 1400);
-    }
+  // ține-l puțin “în viață”
+  sub.textContent = "Finalizing…";
+  troll.textContent = "Almost there… 😈";
+
+  setTimeout(()=>{
+    sub.textContent = "Decrypting love files…";
+    troll.textContent = "Reading /heart/andreea.txt 💖";
+  }, 700);
+
+  setTimeout(()=>{
+    sub.textContent = "Injecting romance.exe…";
+    troll.textContent = "Please wait… (definitely real) 😏";
+  }, 1400);
+
+  setTimeout(()=>{
+    // mic fake “OK”
+    big.textContent = "ACCESS GRANTED ✅";
+    big.style.color = "#00ff99";
+    bar.style.width = "100%";
+    pct.textContent = "100%";
+
+    try{
+      card.animate(
+        [{ transform:"scale(1)" }, { transform:"scale(1.02)" }, { transform:"scale(1)" }],
+        { duration: 260, easing:"ease-out" }
+      );
+    }catch(e){}
+  }, 2100);
+
+  setTimeout(()=>{
+    // si apoi: troll
+    big.textContent = "SIKE 😈";
+    big.style.color = "#ff2f7a";
+    big.style.textShadow = "0 0 18px rgba(255,47,122,.9), 0 0 60px rgba(255,47,122,.55)";
+    sub.textContent = "Unauthorized cuddle attempt detected.";
+    troll.textContent = "Nice try… but NO 😭";
+
+    try{
+      document.body.animate(
+        [
+          { transform: "translateX(0)" },
+          { transform: "translateX(-8px)" },
+          { transform: "translateX(8px)" },
+          { transform: "translateX(-6px)" },
+          { transform: "translateX(6px)" },
+          { transform: "translateX(0)" }
+        ],
+        { duration: 340, easing: "ease-out" }
+      );
+    }catch(e){}
+  }, 2900);
+
+  setTimeout(()=>{
+    wrap.remove();
+    lockPassMsg.textContent = "Nu azi 😏";
+    try{ toast("Trolled 😈"); }catch(e){}
+  }, 3900);
+}
   }, 180);
 
   wrap.addEventListener("click", (e)=>{ e.preventDefault(); e.stopPropagation(); });
@@ -2404,6 +2455,7 @@ function doUnlockByPassword(){
   </script>
 </body>
 </html>
+
 
 
 
