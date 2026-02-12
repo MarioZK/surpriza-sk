@@ -22,6 +22,61 @@
       --shadowSoft: 0 18px 60px rgba(0,0,0,.40);
     }
 
+    /* ===== PASSWORD UNLOCK (ADDED) ===== */
+.lockPassWrap{
+  width:min(760px, 92vw);
+  margin: 10px auto 0;
+  padding: 14px 14px 12px;
+  border-radius: 22px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.20);
+  box-shadow: 0 22px 80px rgba(0,0,0,.40);
+  position:relative;
+}
+
+.lockPassTitle{
+  font-weight: 1000;
+  letter-spacing:.10em;
+  text-transform: uppercase;
+  font-size: 12px;
+  color: rgba(255,255,255,.76);
+  margin-bottom: 10px;
+}
+
+.lockPassRow{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+}
+
+.lockPassInput{
+  flex:1;
+  min-width: 220px;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.18);
+  color: rgba(255,255,255,.92);
+  outline:none;
+  font-size: 15px;
+  box-shadow: 0 18px 60px rgba(0,0,0,.38);
+}
+
+.lockPassInput::placeholder{
+  color: rgba(255,255,255,.55);
+}
+
+.lockPassMsg{
+  margin-top: 10px;
+  min-height: 18px;
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(255,255,255,.78);
+  letter-spacing:.02em;
+}
+
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
@@ -1224,9 +1279,22 @@
           Tip: Nu-i cere cheia iubitului tau!!! Nu o primesti pana pe 14 Februarie 00:00 😳
         </div>
 
-        <div class="lockFooter">
-          <button class="lockBtn" id="lockToggleFx">⏸ Pause FX</button>
-        </div>
+<div class="lockFooter">
+  <button class="lockBtn" id="lockToggleFx">⏸ Pause FX</button>
+</div>
+
+<!-- Password unlock (ADDED) -->
+<div class="lockPassWrap">
+  <div class="lockPassTitle">Ai parola? 🔑</div>
+
+  <div class="lockPassRow">
+    <input class="lockPassInput" id="lockPassInput" type="password" placeholder="Introdu parola…" autocomplete="off" />
+    <button class="lockBtn lockBtnPrimary" id="lockPassBtn">Unlock</button>
+  </div>
+
+  <div class="lockPassMsg" id="lockPassMsg"></div>
+</div>
+
       </div>
     </div>
   </div>
@@ -1936,6 +2004,10 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
       const cdSecs  = document.getElementById("cdSecs");
 
       const lockToggleFx = document.getElementById("lockToggleFx");
+      const lockPassInput = document.getElementById("lockPassInput");
+      const lockPassBtn   = document.getElementById("lockPassBtn");
+      const lockPassMsg   = document.getElementById("lockPassMsg");
+
 
       function computeTarget(){
         const now = new Date();
@@ -1983,6 +2055,35 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
         try{ toast("Unlocked 💘"); }catch(e){}
         hideLock();
       }
+
+            const PASS = "mariosefumeu";
+      const UNLOCK_KEY = "valentine_unlocked_v1";
+
+      function doUnlockByPassword(){
+        const v = (lockPassInput.value || "").trim().toLowerCase();
+        if(!v){
+          lockPassMsg.textContent = "Scrie parola 😏";
+          return;
+        }
+
+        if(v === PASS){
+          lockPassMsg.textContent = "Perfect ✅ Deblocat!";
+          try{ localStorage.setItem(UNLOCK_KEY, "1"); }catch(e){}
+          unlockNow();
+        }else{
+          lockPassMsg.textContent = "Parolă greșită 🙈";
+          try{ lockPassInput.animate(
+            [{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],
+            {duration:260, easing:"ease-out"}
+          ); }catch(e){}
+        }
+      }
+
+      lockPassBtn.addEventListener("click", doUnlockByPassword);
+      lockPassInput.addEventListener("keydown", (e)=>{
+        if(e.key === "Enter") doUnlockByPassword();
+      });
+
 
       function tick(){
         const now = new Date();
@@ -2036,8 +2137,15 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
         }
       }, true);
 
+      const alreadyUnlocked = (()=>{ 
+        try{ return localStorage.getItem(UNLOCK_KEY) === "1"; }catch(e){ return false; }
+      })();
+
       const now = new Date();
-      if(now.getTime() < target.getTime()){
+
+      if(alreadyUnlocked){
+        hideLock();
+      }else if(now.getTime() < target.getTime()){
         showLock();
         tick();
         setInterval(tick, 250);
@@ -2048,4 +2156,5 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
   </script>
 </body>
 </html>
+
 
