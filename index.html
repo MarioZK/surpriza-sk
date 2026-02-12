@@ -1255,6 +1255,95 @@ body.breakMode .hearts{
   animation: shine 2.2s ease-in-out infinite;
   opacity:.75;
 }
+    /* ===== BREAK: PARAGRAPH FADE + GLITCH + LIGHTS OUT + STATIC ===== */
+
+.breakPara{
+  opacity:0;
+  transform: translateY(12px);
+  transition: opacity .55s ease, transform .55s ease;
+  margin-bottom:12px;
+}
+.breakPara.fadeIn{
+  opacity:1;
+  transform: translateY(0);
+}
+
+/* glitch flash text */
+.glitchFinal{
+  animation: glitchFlash .18s linear 5;
+}
+@keyframes glitchFlash{
+  0%{ transform: translateX(0); text-shadow: 0 0 0 rgba(255,0,80,.6); }
+  25%{ transform: translateX(-2px); text-shadow: -2px 0 #ff2f7a; }
+  50%{ transform: translateX(2px);  text-shadow:  2px 0 #7a4dff; }
+  75%{ transform: translateX(-1px); text-shadow: -1px 0 #ffffff; }
+  100%{ transform: translateX(0); }
+}
+
+/* zoom + glow pe "Rămân." */
+.zoomFinal{
+  font-size: clamp(22px, 4vw, 44px);
+  font-weight:1000;
+  letter-spacing:.08em;
+  color:#ffffff;
+  text-shadow:
+    0 0 12px rgba(255,255,255,.35),
+    0 0 40px rgba(255,47,122,.55);
+  animation: finalPulse 1.2s ease-in-out infinite alternate;
+}
+@keyframes finalPulse{
+  from{ transform: scale(1); }
+  to{ transform: scale(1.05); }
+}
+
+/* LIGHTS OUT: taie lumina din fundal */
+body.lightsOut .beatGlow{ opacity:0 !important; transform: scale(.98) translateZ(0) !important; }
+body.lightsOut .hearts{ opacity:.06 !important; filter: grayscale(1) contrast(1.2) !important; }
+
+/* DARKEN takeover */
+.breakFX{
+  transition: background .28s ease, backdrop-filter .28s ease, opacity .28s ease;
+}
+.breakFX.dark{
+  background: radial-gradient(1200px 900px at 50% 45%, rgba(0,0,0,.65), rgba(0,0,0,.98));
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* STATIC overlay când e blackout */
+.breakFX.dark:after{
+  opacity:.35;
+  filter: blur(1px) contrast(1.15);
+}
+
+/* extra micro-jitter pe cutie când e blackout */
+.breakTakeJitter{
+  animation: takeJitter .08s linear 10;
+}
+@keyframes takeJitter{
+  0%{ transform: translateX(0) translateY(0); }
+  25%{ transform: translateX(-2px) translateY(1px); }
+  50%{ transform: translateX(2px) translateY(-1px); }
+  75%{ transform: translateX(-1px) translateY(0); }
+  100%{ transform: translateX(0) translateY(0); }
+}
+
+/* WHITE FLASH helper */
+.whiteFlash{
+  position:fixed; inset:0;
+  background:#fff;
+  opacity:0;
+  pointer-events:none;
+  z-index:10000;
+}
+.whiteFlash.go{
+  animation: wf .22s ease;
+}
+@keyframes wf{
+  0%{opacity:1}
+  100%{opacity:0}
+}
+
 
 
 
@@ -1919,6 +2008,7 @@ function openBreakTakeover(){
   breakTakeover.classList.add("show");
   breakTakeover.setAttribute("aria-hidden","false");
 
+  lightsOut(false); // reset înainte
   typeBreakTakeover(BREAK_MESSAGE);
   setVolSmooth(0.18);
 
@@ -1931,30 +2021,105 @@ function openBreakTakeover(){
 
   toast("Safe mode 🤍");
 }
+function typeBreakTakeover(text){
+  breakSmall.innerHTML = "";
 
-    function typeBreakTakeover(text){
-  breakSmall.textContent = "";
+  const paragraphs = text.split("\n\n");
+  let pIndex = 0;
+
+  const showNext = ()=>{
+    if(pIndex >= paragraphs.length) return;
+
+    const raw = paragraphs[pIndex].trim();
+    const p = document.createElement("div");
+    p.className = "breakPara";
+    breakSmall.appendChild(p);
+
+    if(raw.includes("NICI.")){
+      lightsOut(true);
+      whiteFlash();
+
+      const box = breakTakeover.querySelector(".breakBox");
+      if(box){
+        box.classList.remove("breakTakeJitter");
+        void box.offsetWidth;
+        box.classList.add("breakTakeJitter");
+      }
+
+      glitchLine(p, raw, ()=>{
+        setTimeout(()=>{
+          pIndex++;
+          setTimeout(showNext, 420);
+        }, 250);
+      });
+      return;
+    }
+
+    if(raw.includes("Rămân")){
+      p.textContent = raw;
+      p.classList.add("fadeIn");
+      setTimeout(()=>{
+        p.classList.add("zoomFinal");
+        pIndex++;
+        setTimeout(showNext, 900);
+      }, 220);
+      return;
+    }
+
+    p.textContent = raw;
+    p.classList.add("fadeIn");
+
+    pIndex++;
+    setTimeout(showNext, 520);
+  };
+
+  showNext();
+}
+
+/* ===== HELPERS ===== */
+
+function glitchLine(el, text, done){
   let i = 0;
+  const chars = "█▓▒░<>/\\[]{}—+=!@#$%^&*";
+  const speed = 22;
 
   function step(){
-    if(i >= text.length) return;
-
-    breakSmall.textContent += text[i++];
-    const ch = text[i-1];
-
-    let d = 22;
-    if(ch === " ") d = 10;
-    if(ch === "\n") d = 120;
-    if([",",".","!","?","…",":",";"].includes(ch)) d = 150;
-
-    setTimeout(step, d);
+    if(i < text.length){
+      const current = text.slice(0, i);
+      const glitch = chars[Math.floor(Math.random()*chars.length)];
+      el.textContent = current + glitch;
+      i++;
+      setTimeout(step, speed);
+    }else{
+      el.textContent = text;
+      el.classList.add("glitchFinal");
+      setTimeout(()=>{
+        el.classList.remove("glitchFinal");
+        done && done();
+      }, 720);
+    }
   }
-
   step();
 }
 
+function lightsOut(on){
+  document.body.classList.toggle("lightsOut", !!on);
+  breakFX.classList.toggle("dark", !!on);
+}
+
+function whiteFlash(){
+  const f = document.createElement("div");
+  f.className = "whiteFlash";
+  document.body.appendChild(f);
+  void f.offsetWidth;
+  f.classList.add("go");
+  setTimeout(()=> f.remove(), 260);
+}
+
+
 
 function closeBreakTakeover(){
+  lightsOut(false);
   document.body.classList.remove("breakMode");
 
   breakFX.classList.remove("show");
@@ -1964,12 +2129,6 @@ function closeBreakTakeover(){
   setPauseFX(false);
   setVolSmooth(0.85);
 }
-
-breakTakeoverPromise.addEventListener("click", ()=>{
-  toast("I still choose you 🤍");
-  launchConfetti();
-  closeBreakTakeover();
-});
 
 // click pe fundal să închidă
 breakTakeover.addEventListener("click", (e)=>{
@@ -2818,6 +2977,7 @@ if(now.getTime() < target.getTime()){
   </script>
 </body>
 </html>
+
 
 
 
