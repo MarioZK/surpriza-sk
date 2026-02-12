@@ -2560,7 +2560,6 @@ function doUnlockByPassword(){
   // ✅ parola REALA
   if(v === PASS_REAL){
     lockPassMsg.textContent = "";
-    try{ localStorage.setItem(UNLOCK_KEY, "1"); }catch(e){}
     unlockNow();
     return;
   }
@@ -2649,25 +2648,22 @@ function doUnlockByPassword(){
         }
       }, true);
 
-      const alreadyUnlocked = (()=>{ 
-        try{ return localStorage.getItem(UNLOCK_KEY) === "1"; }catch(e){ return false; }
-      })();
 
       const now = new Date();
 
-      if(alreadyUnlocked){
-        hideLock();
-      }else if(now.getTime() < target.getTime()){
-        showLock();
-        tick();
-        setInterval(tick, 250);
-      }else{
-        hideLock();
-      }
+if(now.getTime() < target.getTime()){
+  showLock();
+  tick();
+  setInterval(tick, 250);
+}else{
+  hideLock();
+}
+
     })();
   </script>
 </body>
 </html>
+
 
 
 
