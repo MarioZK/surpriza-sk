@@ -840,6 +840,73 @@
   flex-wrap:wrap;
   justify-content:center;
 }
+
+    /* ===== FINAL CINEMATIC PERF + EXTRAS ===== */
+    .cineFrame, .cineFrame *{ will-change: transform, opacity; }
+    .cineFrame img{ backface-visibility:hidden; transform: translateZ(0) scale(1); }
+
+    /* cinematic grade (cheap) */
+    .cineFrame:after{
+      content:"";
+      position:absolute; inset:0;
+      border-radius:20px;
+      pointer-events:none;
+      background:
+        radial-gradient(120% 90% at 50% 40%, rgba(255,47,122,.10), transparent 55%),
+        radial-gradient(120% 90% at 50% 60%, rgba(122,77,255,.10), transparent 60%),
+        radial-gradient(120% 120% at 50% 50%, transparent 60%, rgba(0,0,0,.35) 100%);
+      mix-blend-mode: screen;
+      opacity:.9;
+    }
+
+    /* stamp impact */
+    .cineStamp{
+      transform: translateZ(0) rotate(-8deg) scale(0);
+      transform-origin: 20% 80%;
+    }
+    .showStamp{
+      transform: translateZ(0) rotate(-8deg) scale(1);
+      animation: stampPop 520ms cubic-bezier(.18,.9,.2,1.15) both;
+    }
+    @keyframes stampPop{
+      0%{ transform: rotate(-18deg) scale(.1); filter: blur(1px); }
+      55%{ transform: rotate(-6deg) scale(1.08); filter: blur(0); }
+      100%{ transform: rotate(-8deg) scale(1); }
+    }
+
+    /* orbit: slightly lighter */
+    .orbit span{
+      opacity:.78;
+      filter: drop-shadow(0 10px 16px rgba(255,47,122,.12));
+    }
+
+    /* Title card (LOCKED IN) */
+    .titleCard{
+      position:fixed; inset:0;
+      display:none;
+      place-items:center;
+      z-index:95;
+      pointer-events:none;
+      background: radial-gradient(900px 600px at 50% 50%, rgba(255,47,122,.18), rgba(0,0,0,.82));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .titleCard.show{ display:grid; animation: fadeIn .18s ease both; }
+    .titleCard .t{
+      font-size: clamp(34px, 6vw, 86px);
+      font-weight: 1000;
+      letter-spacing:.08em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, var(--pink), var(--pink2), var(--violet));
+      -webkit-background-clip:text; background-clip:text;
+      color: transparent;
+      filter: drop-shadow(0 0 22px rgba(255,47,122,.28)) drop-shadow(0 0 70px rgba(122,77,255,.20));
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .orbit span, .cineRing, .cineFrame img{ animation:none !important; transition:none !important; }
+    }
+
   </style>
 </head>
 
@@ -1011,6 +1078,11 @@
 
   </div>
 </div>
+
+  <!-- Title card (cinematic) -->
+  <div class="titleCard" id="titleCard" aria-hidden="true">
+    <div class="t" id="titleCardText">LOCKED IN: ANDREEA</div>
+  </div>
 
   <script>
     const NAME = "Andreea";
@@ -1320,6 +1392,22 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
 
       // tiny pulse on bass
       const bassAvg = bass / 12;
+
+      // --- Bass sync for FINAL CINEMATIC (no extra loops) ---
+      if(finalCine && finalCine.classList.contains("show")){
+        const now = performance.now();
+        if(bassAvg > 0.62 && (now - lastCineBeatAt) > 260){
+          lastCineBeatAt = now;
+          const frame = document.querySelector(".cineFrame");
+          if(frame){
+            frame.animate(
+              [{ transform:"scale(1)" }, { transform:"scale(1.015)" }, { transform:"scale(1)" }],
+              { duration: 220, easing: "ease-out" }
+            );
+          }
+        }
+      }
+
       if(bassAvg > 0.62 && !document.body.classList.contains("pauseFX")){
         card.animate(
           [{ transform:"scale(1)" }, { transform:"scale(1.006)" }, { transform:"scale(1)" }],
@@ -1430,6 +1518,24 @@ const cineReplay = document.getElementById("cineReplay");
 const cineClose = document.getElementById("cineClose");
 const cineSecret = document.getElementById("cineSecret");
 
+
+const titleCard = document.getElementById("titleCard");
+const titleCardText = document.getElementById("titleCardText");
+
+let lastCineBeatAt = 0;
+
+function showTitleCard(){
+  if(!titleCard) return;
+  titleCardText.textContent = `LOCKED IN: ${NAME.toUpperCase()}`;
+  titleCard.classList.add("show");
+  titleCard.setAttribute("aria-hidden","false");
+  setTimeout(()=>{
+    titleCard.classList.remove("show");
+    titleCard.setAttribute("aria-hidden","true");
+  }, 850);
+}
+
+
 const FINAL_MESSAGE = `Gata.\nAm facut-o oficial.\n\nCand ai bifat, ai semnat.\nSi eu… te aleg. Mereu.\n\nTe iubesc, ${NAME}. ❤️`;
 
 function typeFinal(text){
@@ -1498,6 +1604,7 @@ function openFinalCine(){
         cineTyped.innerHTML = applyHighlights(raw);
         cineCursor.style.display = "none";
         cineSig.classList.add("showSig");
+        setTimeout(showTitleCard, 260);
         return;
       }
       raw += t[i++];
