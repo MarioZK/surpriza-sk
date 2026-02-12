@@ -678,168 +678,334 @@
       -webkit-background-clip:text; background-clip:text; color:transparent;
     }
     .finalStatus{ margin-top: 8px; font-weight: 1000; color: rgba(255,255,255,.78); min-height: 18px; }
-  
 
-/* ===== FINAL CINEMATIC ===== */
-.cineWrap{
-  width:min(1100px, 96vw);
-  height:min(90vh, 900px);
-  border-radius:30px;
-  background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
-  border:1px solid rgba(255,255,255,.16);
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  overflow:hidden;
-  position:relative;
-}
-@media(max-width:900px){
-  .cineWrap{grid-template-columns:1fr;}
-}
-.cineFlash{
-  position:absolute;
-  inset:0;
-  background:white;
-  opacity:0;
-  pointer-events:none;
-}
-.flashAnim{ animation: cineFlash 0.4s ease; }
-@keyframes cineFlash{ 0%{opacity:1} 100%{opacity:0} }
+    /* ===== FINAL CINEMATIC ===== */
+    .cineWrap{
+      width:min(1100px, 96vw);
+      height:min(90vh, 900px);
+      border-radius:30px;
+      background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.16);
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      overflow:hidden;
+      position:relative;
+    }
+    @media(max-width:900px){
+      .cineWrap{grid-template-columns:1fr;}
+    }
+    .cineFlash{
+      position:absolute;
+      inset:0;
+      background:white;
+      opacity:0;
+      pointer-events:none;
+    }
+    .flashAnim{ animation: cineFlash 0.4s ease; }
+    @keyframes cineFlash{ 0%{opacity:1} 100%{opacity:0} }
 
-.cineLeft{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  padding:30px;
-  gap:18px;
-}
-.cineFrame{
-  position:relative;
-  width:100%;
-  max-width:420px;
-}
-.cineFrame img{
-  width:100%;
-  border-radius:20px;
-  transform:scale(1);
-  transition:transform 3s ease;
-  display:block;
-}
-.zoomIn{ transform:scale(1.12); }
+    .cineLeft{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:30px;
+      gap:18px;
+    }
+    .cineFrame{
+      position:relative;
+      width:100%;
+      max-width:420px;
+    }
+    .cineFrame img{
+      width:100%;
+      border-radius:20px;
+      transform:scale(1);
+      transition:transform 3s ease;
+      display:block;
+    }
+    .zoomIn{ transform:scale(1.12); }
 
-.cineRing{
-  position:absolute;
-  inset:0;
-  border:3px solid var(--pink);
-  border-radius:25px;
-  animation: cineBeat 1.15s ease-in-out infinite;
-  box-shadow: 0 0 0 3px rgba(255,47,122,.12), 0 24px 90px rgba(255,47,122,.16);
-  pointer-events:none;
-}
-@keyframes cineBeat{
-  0%{ transform:scale(1); opacity:.88 }
-  50%{ transform:scale(1.045); opacity:.35 }
-  100%{ transform:scale(1); opacity:.88 }
-}
+    .cineRing{
+      position:absolute;
+      inset:0;
+      border:3px solid var(--pink);
+      border-radius:25px;
+      animation: cineBeat 1.15s ease-in-out infinite;
+      box-shadow: 0 0 0 3px rgba(255,47,122,.12), 0 24px 90px rgba(255,47,122,.16);
+      pointer-events:none;
+    }
+    @keyframes cineBeat{
+      0%{ transform:scale(1); opacity:.88 }
+      50%{ transform:scale(1.045); opacity:.35 }
+      100%{ transform:scale(1); opacity:.88 }
+    }
 
-.orbit{ position:absolute; inset:0; pointer-events:none; }
-.orbit span{
-  position:absolute;
-  width:10px; height:10px;
-  background: linear-gradient(180deg, var(--pink), var(--pink2));
-  border-radius:50%;
-  left:50%; top:50%;
-  transform: translate(-50%,-50%);
-  animation: cineOrbit 6s linear infinite;
-  filter: drop-shadow(0 12px 18px rgba(255,47,122,.20));
-  opacity:.95;
-}
-.orbit span:nth-child(1){ animation-delay:0s; }
-.orbit span:nth-child(2){ animation-delay:1s; }
-.orbit span:nth-child(3){ animation-delay:2s; }
-.orbit span:nth-child(4){ animation-delay:3s; }
-.orbit span:nth-child(5){ animation-delay:4s; }
-.orbit span:nth-child(6){ animation-delay:5s; }
-@keyframes cineOrbit{
-  0%{ transform: translate(-50%,-50%) rotate(0deg) translateX(180px) rotate(0deg); }
-  100%{ transform: translate(-50%,-50%) rotate(360deg) translateX(180px) rotate(-360deg); }
-}
+    .orbit{ position:absolute; inset:0; pointer-events:none; }
+    .orbit span{
+      position:absolute;
+      width:10px; height:10px;
+      background: linear-gradient(180deg, var(--pink), var(--pink2));
+      border-radius:50%;
+      left:50%; top:50%;
+      transform: translate(-50%,-50%);
+      animation: cineOrbit 6s linear infinite;
+      filter: drop-shadow(0 12px 18px rgba(255,47,122,.20));
+      opacity:.95;
+    }
+    .orbit span:nth-child(1){ animation-delay:0s; }
+    .orbit span:nth-child(2){ animation-delay:1s; }
+    .orbit span:nth-child(3){ animation-delay:2s; }
+    .orbit span:nth-child(4){ animation-delay:3s; }
+    .orbit span:nth-child(5){ animation-delay:4s; }
+    .orbit span:nth-child(6){ animation-delay:5s; }
+    @keyframes cineOrbit{
+      0%{ transform: translate(-50%,-50%) rotate(0deg) translateX(180px) rotate(0deg); }
+      100%{ transform: translate(-50%,-50%) rotate(360deg) translateX(180px) rotate(-360deg); }
+    }
 
-.cineStamp{
-  position:absolute;
-  bottom:18px;
-  left:18px;
-  padding:10px 14px;
-  border-radius:12px;
-  border:1px solid rgba(255,255,255,.16);
-  background: rgba(255,47,122,.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 22px 80px rgba(0,0,0,.55);
-  font-weight:1000;
-  letter-spacing:.12em;
-  text-transform: uppercase;
-  transform: scale(0) rotate(-8deg);
-  transform-origin: left bottom;
-  transition: transform .38s cubic-bezier(.2,.9,.2,1);
-  pointer-events:none;
-}
-.showStamp{ transform: scale(1) rotate(-8deg); }
+    .cineStamp{
+      position:absolute;
+      bottom:18px;
+      left:18px;
+      padding:10px 14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(255,47,122,.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 22px 80px rgba(0,0,0,.55);
+      font-weight:1000;
+      letter-spacing:.12em;
+      text-transform: uppercase;
+      transform: scale(0) rotate(-8deg);
+      transform-origin: left bottom;
+      transition: transform .38s cubic-bezier(.2,.9,.2,1);
+      pointer-events:none;
+    }
+    .showStamp{ transform: scale(1) rotate(-8deg); }
 
-.cineRight{
-  padding:40px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:12px;
-  min-height:0;
-}
-.cineTitle{
-  font-size: clamp(22px, 2.8vw, 34px);
-  font-weight:1000;
-  letter-spacing:-.02em;
-}
-.cineMsgBox{
-  border-radius: 20px;
-  padding: 16px;
-  line-height:1.6;
-  font-size: 16px;
-  color: rgba(20,20,20,.92);
-  min-height: 180px;
-  overflow-y:auto;
-  scroll-behavior:smooth;
-  white-space: pre-wrap;
-  background:
-    radial-gradient(1200px 500px at 10% 0%, rgba(255,125,180,.18), transparent 60%),
-    radial-gradient(1200px 500px at 90% 0%, rgba(122,77,255,.16), transparent 60%),
-    repeating-linear-gradient(
-      to bottom,
-      rgba(255,255,255,.92) 0px,
-      rgba(255,255,255,.92) 26px,
-      rgba(255,240,248,.92) 27px
-    );
-  border: 1px solid rgba(255,255,255,.16);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
-}
-.cineSig{
-  margin-top: 6px;
-  font-size: 22px;
-  font-weight:1000;
-  opacity:0;
-  transition: opacity .9s ease;
-  background: linear-gradient(90deg, var(--pink), var(--pink2), var(--violet));
-  -webkit-background-clip:text; background-clip:text;
-  color: transparent;
-  filter: drop-shadow(0 0 18px rgba(255,47,122,.18));
-}
-.showSig{ opacity:1; }
+    .cineRight{
+      padding:40px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:12px;
+      min-height:0;
+    }
+    .cineTitle{
+      font-size: clamp(22px, 2.8vw, 34px);
+      font-weight:1000;
+      letter-spacing:-.02em;
+    }
+    .cineMsgBox{
+      border-radius: 20px;
+      padding: 16px;
+      line-height:1.6;
+      font-size: 16px;
+      color: rgba(20,20,20,.92);
+      min-height: 180px;
+      overflow-y:auto;
+      scroll-behavior:smooth;
+      white-space: pre-wrap;
+      background:
+        radial-gradient(1200px 500px at 10% 0%, rgba(255,125,180,.18), transparent 60%),
+        radial-gradient(1200px 500px at 90% 0%, rgba(122,77,255,.16), transparent 60%),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,.92) 0px,
+          rgba(255,255,255,.92) 26px,
+          rgba(255,240,248,.92) 27px
+        );
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.75);
+    }
+    .cineSig{
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight:1000;
+      opacity:0;
+      transition: opacity .9s ease;
+      background: linear-gradient(90deg, var(--pink), var(--pink2), var(--violet));
+      -webkit-background-clip:text; background-clip:text;
+      color: transparent;
+      filter: drop-shadow(0 0 18px rgba(255,47,122,.18));
+    }
+    .showSig{ opacity:1; }
 
-.cineBtns{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
+    .cineBtns{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    /* ===== COUNTDOWN LOCK OVERLAY (ADDED) ===== */
+    .lockOverlay{
+      position:fixed; inset:0;
+      display:none;
+      z-index:200;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+      background:
+        radial-gradient(950px 650px at 50% 45%, rgba(255,47,122,.22), rgba(0,0,0,.86));
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .lockOverlay.show{ display:flex; animation: fadeIn .25s ease both; }
+    .lockCard{
+      width:min(980px, 96vw);
+      border-radius: 30px;
+      background: linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow: 0 34px 160px rgba(0,0,0,.74);
+      overflow:hidden;
+      position:relative;
+    }
+    .lockCard:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(900px 420px at 10% 0%, rgba(255,125,180,.16), transparent 55%),
+        radial-gradient(900px 420px at 90% 0%, rgba(122,77,255,.14), transparent 55%),
+        radial-gradient(700px 500px at 50% 115%, rgba(77,255,208,.10), transparent 55%);
+      opacity:.95;
+      pointer-events:none;
+    }
+    .lockInner{
+      position:relative;
+      padding:20px 18px 18px;
+      text-align:center;
+    }
+    .lockTop{
+      display:flex; justify-content:space-between; align-items:center;
+      gap:10px; flex-wrap:wrap;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      opacity:.96;
+      margin-bottom:12px;
+    }
+    .lockPill{
+      padding:7px 11px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      display:flex; gap:8px; align-items:center;
+      user-select:none;
+      box-shadow: var(--shadowSoft);
+    }
+    .lockDot{
+      width:8px; height:8px; border-radius:999px;
+      background: rgba(255,255,255,.22);
+      box-shadow: 0 0 0 3px rgba(255,255,255,.06);
+    }
+    .lockDot.on{
+      background: linear-gradient(180deg, var(--pink), var(--pink2));
+      box-shadow: 0 0 0 3px rgba(255,47,122,.16), 0 14px 40px rgba(255,47,122,.20);
+    }
+    .lockTitle{
+      margin: 10px 0 6px;
+      font-size: clamp(22px, 3.6vw, 44px);
+      font-weight: 1000;
+      letter-spacing: -0.03em;
+      line-height:1.05;
+    }
+    .lockSub{
+      margin: 0 auto 14px;
+      max-width: 720px;
+      color: rgba(255,255,255,.72);
+      font-size: 14.5px;
+      line-height:1.45;
+    }
+    .countGrid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap:12px;
+      width:min(760px, 92vw);
+      margin: 12px auto 10px;
+    }
+    @media(max-width:620px){
+      .countGrid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    .tile{
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      box-shadow: 0 22px 80px rgba(0,0,0,.40);
+      padding: 14px 12px 12px;
+    }
+    .tileNum{
+      font-size: clamp(34px, 5.2vw, 62px);
+      font-weight: 1000;
+      letter-spacing: -0.02em;
+      line-height:1;
+      background: linear-gradient(90deg, var(--pink), var(--pink2), var(--violet));
+      -webkit-background-clip:text; background-clip:text;
+      color: transparent;
+      filter: drop-shadow(0 0 22px rgba(255,47,122,.16));
+    }
+    .tileLab{
+      margin-top:6px;
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color: rgba(255,255,255,.70);
+    }
+    .lockProgWrap{
+      width:min(760px, 92vw);
+      margin: 10px auto 6px;
+      border-radius:999px;
+      height: 12px;
+      background: rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      overflow:hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.25);
+    }
+    .lockProg{
+      height:100%;
+      width:0%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--pink), var(--pink2), var(--violet));
+      box-shadow: 0 14px 45px rgba(255,47,122,.28);
+      transition: width .25s ease;
+    }
+    .lockFooter{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+    .lockBtn{
+      padding:12px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.92);
+      font-weight: 1000;
+      cursor:pointer;
+      box-shadow: 0 18px 60px rgba(0,0,0,.38);
+    }
+    .lockBtnPrimary{
+      background: linear-gradient(180deg, rgba(255,47,122,.96), rgba(255,125,180,.90));
+      border: none;
+    }
+    .lockSmall{
+      margin-top:10px;
+      font-size: 12px;
+      letter-spacing:.08em;
+      color: rgba(255,255,255,.65);
+    }
+    .lockFlash{
+      position:absolute;
+      inset:0;
+      background:white;
+      opacity:0;
+      pointer-events:none;
+    }
+    .lockFlash.flash{ animation: cineFlash 0.4s ease; }
   </style>
 </head>
 
@@ -974,43 +1140,97 @@
     </div>
   </div>
 
+  <!-- ===== FINAL CINEMATIC ===== -->
+  <div class="overlay" id="finalCine" aria-hidden="true">
+    <div class="cineWrap" role="dialog" aria-modal="true">
 
-<!-- ===== FINAL CINEMATIC ===== -->
-<div class="overlay" id="finalCine" aria-hidden="true">
-  <div class="cineWrap" role="dialog" aria-modal="true">
+      <div class="cineFlash" id="cineFlash"></div>
 
-    <div class="cineFlash" id="cineFlash"></div>
+      <div class="cineLeft">
+        <div class="cineFrame">
+          <img src="noi.jpg" alt="Noi doi (cinematic)" id="cineImg">
+          <div class="cineRing"></div>
 
-    <div class="cineLeft">
-      <div class="cineFrame">
-        <img src="noi.jpg" alt="Noi doi (cinematic)" id="cineImg">
-        <div class="cineRing"></div>
+          <div class="orbit" aria-hidden="true">
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+          </div>
 
-        <div class="orbit" aria-hidden="true">
-          <span></span><span></span><span></span>
-          <span></span><span></span><span></span>
+          <div class="cineStamp" id="cineStamp">SIGNED &amp; SEALED ✅</div>
         </div>
 
-        <div class="cineStamp" id="cineStamp">SIGNED &amp; SEALED ✅</div>
+        <div class="cineBtns">
+          <button class="btn2" id="cineReplay">⟲ Replay</button>
+          <button class="btn2" id="cineSecret">🔓 Open secret</button>
+          <button class="btn2" id="cineClose">✖ Close</button>
+        </div>
       </div>
 
-      <div class="cineBtns">
-        <button class="btn2" id="cineReplay">⟲ Replay</button>
-        <button class="btn2" id="cineSecret">🔓 Open secret</button>
-        <button class="btn2" id="cineClose">✖ Close</button>
+      <div class="cineRight">
+        <div class="cineTitle" id="cineTitle">Gata. E oficial. 💍</div>
+        <div class="cineMsgBox" id="cineMsgBox">
+          <span id="cineTyped"></span><span class="typingCursor" id="cineCursor"></span>
+        </div>
+        <div class="cineSig" id="cineSig">— Andreea</div>
       </div>
+
     </div>
-
-    <div class="cineRight">
-      <div class="cineTitle" id="cineTitle">Gata. E oficial. 💍</div>
-      <div class="cineMsgBox" id="cineMsgBox">
-        <span id="cineTyped"></span><span class="typingCursor" id="cineCursor"></span>
-      </div>
-      <div class="cineSig" id="cineSig">— Andreea</div>
-    </div>
-
   </div>
-</div>
+
+  <!-- ===== LOCK COUNTDOWN OVERLAY (ADDED) ===== -->
+  <div class="lockOverlay" id="lockOverlay" aria-hidden="true">
+    <div class="lockCard" role="dialog" aria-modal="true">
+      <div class="lockFlash" id="lockFlash"></div>
+
+      <div class="lockInner">
+        <div class="lockTop">
+          <span class="lockPill"><span class="lockDot on"></span> LOCKED</span>
+          <span class="lockPill" id="lockTargetText">UNLOCK: 14 FEB • 00:00</span>
+          <span class="lockPill" id="lockNowText">NOW: --</span>
+        </div>
+
+        <div class="lockTitle">
+          Surpriza se deschide la <span class="gradientName">14 Februarie • 00:00</span> 💘
+        </div>
+
+        <div class="lockSub">
+          Până atunci e “sealed”. Când countdown-ul ajunge la zero, se deblochează automat și poți apăsa YES/NO și tot flow-ul tău.
+        </div>
+
+        <div class="countGrid">
+          <div class="tile">
+            <div class="tileNum" id="cdDays">00</div>
+            <div class="tileLab">Days</div>
+          </div>
+          <div class="tile">
+            <div class="tileNum" id="cdHours">00</div>
+            <div class="tileLab">Hours</div>
+          </div>
+          <div class="tile">
+            <div class="tileNum" id="cdMins">00</div>
+            <div class="tileLab">Minutes</div>
+          </div>
+          <div class="tile">
+            <div class="tileNum" id="cdSecs">00</div>
+            <div class="tileLab">Seconds</div>
+          </div>
+        </div>
+
+        <div class="lockProgWrap">
+          <div class="lockProg" id="lockProg"></div>
+        </div>
+
+        <div class="lockSmall" id="lockTiny">
+          Tip: lasă tab-ul deschis — countdown-ul e realtime.
+        </div>
+
+        <div class="lockFooter">
+          <button class="lockBtn" id="lockToggleFx">⏸ Pause FX</button>
+          <button class="lockBtn lockBtnPrimary" id="lockTestUnlock">🔓 Test unlock (dev)</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const NAME = "Andreea";
@@ -1424,22 +1644,22 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
       });
     });
 
-// ===== FINAL CINEMATIC =====
-const finalCine = document.getElementById("finalCine");
-const cineFlash = document.getElementById("cineFlash");
-const cineImg = document.getElementById("cineImg");
-const cineStamp = document.getElementById("cineStamp");
-const cineTitle = document.getElementById("cineTitle");
-const cineMsgBox = document.getElementById("cineMsgBox");
-const cineTyped = document.getElementById("cineTyped");
-const cineCursor = document.getElementById("cineCursor");
-const cineSig = document.getElementById("cineSig");
+    // ===== FINAL CINEMATIC =====
+    const finalCine = document.getElementById("finalCine");
+    const cineFlash = document.getElementById("cineFlash");
+    const cineImg = document.getElementById("cineImg");
+    const cineStamp = document.getElementById("cineStamp");
+    const cineTitle = document.getElementById("cineTitle");
+    const cineMsgBox = document.getElementById("cineMsgBox");
+    const cineTyped = document.getElementById("cineTyped");
+    const cineCursor = document.getElementById("cineCursor");
+    const cineSig = document.getElementById("cineSig");
 
-const cineReplay = document.getElementById("cineReplay");
-const cineClose = document.getElementById("cineClose");
-const cineSecret = document.getElementById("cineSecret");
+    const cineReplay = document.getElementById("cineReplay");
+    const cineClose = document.getElementById("cineClose");
+    const cineSecret = document.getElementById("cineSecret");
 
-const FINAL_MESSAGE = `WOW!! Ai bifat!! Stiam tho... insaaaaa nu e doar o bifa...\n
+    const FINAL_MESSAGE = `WOW!! Ai bifat!! Stiam tho... insaaaaa nu e doar o bifa...\n
 E o alegere.\n
 E asumare.\n
 E un “raman”.\n
@@ -1450,126 +1670,94 @@ Si ca te aleg,\n
 chiar si cand e greu.\n
 Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
 
-function typeFinal(text){
-  cineTyped.textContent = "";
-  cineSig.classList.remove("showSig");
-  cineCursor.style.display = "inline-block";
+    function openFinalCine(){
+      setPauseFX(true);
+      finalCine.classList.add("show");
+      finalCine.setAttribute("aria-hidden","false");
 
-  let i = 0;
-  const tick = ()=>{
-    if(i >= text.length){
-      cineCursor.style.display = "none";
-      cineSig.classList.add("showSig");
-      return;
+      cineTitle.textContent = "Gata. E oficial. 💍";
+      cineImg.classList.remove("zoomIn");
+      cineStamp.classList.remove("showStamp");
+      cineFlash.classList.remove("flashAnim");
+      cineSig.classList.remove("showSig");
+
+      // premium flash
+      cineFlash.classList.add("flashAnim");
+      setTimeout(()=>cineFlash.classList.remove("flashAnim"), 420);
+
+      // cinematic zoom + stamp
+      setTimeout(()=>cineImg.classList.add("zoomIn"), 180);
+      setTimeout(()=>cineStamp.classList.add("showStamp"), 520);
+
+      launchConfetti();
+      toast("Signed & sealed ✅");
+
+      // typewriter with existing highlights helper
+      setTimeout(()=>{
+        cineTyped.innerHTML = "";
+        cineCursor.style.display = "inline-block";
+
+        let raw = "";
+        let i = 0;
+        const t = FINAL_MESSAGE;
+
+        const step = ()=>{
+          if(i >= t.length){
+            cineTyped.innerHTML = applyHighlights(raw);
+            cineCursor.style.display = "none";
+            cineSig.classList.add("showSig");
+            return;
+          }
+          raw += t[i++];
+          cineTyped.textContent = raw;
+          cineMsgBox.scrollTop = cineMsgBox.scrollHeight;
+
+          const ch = raw[raw.length-1];
+          let d = 26;
+          if(ch === " ") d = 14;
+          if(ch === "\n") d = 120;
+          if([",",".","!","?","…",":",";"].includes(ch)) d = 150;
+          setTimeout(step, d);
+        };
+        step();
+      }, 720);
     }
-    cineTyped.textContent += text[i++];
-    cineMsgBox.scrollTop = cineMsgBox.scrollHeight;
 
-    const ch = text[i-1];
-    let d = 26;
-    if(ch === " ") d = 14;
-    if(ch === "\n") d = 120;
-    if([",",".","!","?","…",":",";"].includes(ch)) d = 150;
+    function closeFinalCine(){
+      finalCine.classList.remove("show");
+      finalCine.setAttribute("aria-hidden","true");
+      setPauseFX(false);
+      cineImg.classList.remove("zoomIn");
+      cineStamp.classList.remove("showStamp");
+      cineSig.classList.remove("showSig");
+      cineCursor.style.display = "none";
+      toast(`Locked in: ${NAME} 💖`);
+    }
 
-    setTimeout(tick, d);
-  };
-  tick();
-}
+    cineClose.addEventListener("click", closeFinalCine);
+    finalCine.addEventListener("click",(e)=>{ if(e.target===finalCine) closeFinalCine(); });
 
-function openFinalCine(){
-  setPauseFX(true);
-  finalCine.classList.add("show");
-  finalCine.setAttribute("aria-hidden","false");
+    cineReplay.addEventListener("click", ()=>{
+      toast("Replay ✨");
+      openFinalCine();
+    });
 
-  cineTitle.textContent = "Gata. E oficial. 💍";
-  cineImg.classList.remove("zoomIn");
-  cineStamp.classList.remove("showStamp");
-  cineFlash.classList.remove("flashAnim");
-  cineSig.classList.remove("showSig");
-
-  // premium flash
-  cineFlash.classList.add("flashAnim");
-  setTimeout(()=>cineFlash.classList.remove("flashAnim"), 420);
-
-  // cinematic zoom + stamp
-  setTimeout(()=>cineImg.classList.add("zoomIn"), 180);
-  setTimeout(()=>cineStamp.classList.add("showStamp"), 520);
-
-  launchConfetti();
-  toast("Signed & sealed ✅");
-
-  // typewriter with existing highlights helper
-  // (we reuse applyHighlights to keep your vibe consistent)
-  setTimeout(()=>{
-    typeFinal(""); // reset cursor
-    // use existing applyHighlights
-    cineTyped.innerHTML = "";
-    cineCursor.style.display = "inline-block";
-
-    // progressive typing into a buffer, then highlight at end
-    let raw = "";
-    let i = 0;
-    const t = FINAL_MESSAGE;
-
-    const step = ()=>{
-      if(i >= t.length){
-        cineTyped.innerHTML = applyHighlights(raw);
-        cineCursor.style.display = "none";
-        cineSig.classList.add("showSig");
-        return;
-      }
-      raw += t[i++];
-      cineTyped.textContent = raw; // keep it fast while typing
-      cineMsgBox.scrollTop = cineMsgBox.scrollHeight;
-
-      const ch = raw[raw.length-1];
-      let d = 26;
-      if(ch === " ") d = 14;
-      if(ch === "\n") d = 120;
-      if([",",".","!","?","…",":",";"].includes(ch)) d = 150;
-      setTimeout(step, d);
-    };
-    step();
-  }, 720);
-}
-
-function closeFinalCine(){
-  finalCine.classList.remove("show");
-  finalCine.setAttribute("aria-hidden","true");
-  setPauseFX(false);
-  cineImg.classList.remove("zoomIn");
-  cineStamp.classList.remove("showStamp");
-  cineSig.classList.remove("showSig");
-  cineCursor.style.display = "none";
-  toast(`Locked in: ${NAME} 💖`);
-}
-
-cineClose.addEventListener("click", closeFinalCine);
-finalCine.addEventListener("click",(e)=>{ if(e.target===finalCine) closeFinalCine(); });
-
-cineReplay.addEventListener("click", ()=>{
-  toast("Replay ✨");
-  openFinalCine();
-});
-
-cineSecret.addEventListener("click", ()=>{
-  // reuse your existing secretNote behavior, but make it a little extra
-  secretNote.classList.add("show");
-  toast("Secret unlocked ❤️");
-  setTimeout(()=>secretNote.classList.remove("show"), 2200);
-});
-
+    cineSecret.addEventListener("click", ()=>{
+      secretNote.classList.add("show");
+      toast("Secret unlocked ❤️");
+      setTimeout(()=>secretNote.classList.remove("show"), 2200);
+    });
 
     // Checkbox
-finalCheck.addEventListener("change", ()=>{
-  if(finalCheck.checked){
-    finalStatus.textContent = "";
-    openFinalCine();
-    showLockedBadge();
-  }else{
-    finalStatus.textContent = "";
-  }
-});
+    finalCheck.addEventListener("change", ()=>{
+      if(finalCheck.checked){
+        finalStatus.textContent = "";
+        openFinalCine();
+        showLockedBadge();
+      }else{
+        finalStatus.textContent = "";
+      }
+    });
 
     // Stage
     async function runStage(){
@@ -1735,8 +1923,133 @@ finalCheck.addEventListener("change", ()=>{
         if(finalCine.classList.contains("show")) closeFinalCine();
       }
     });
+
+    /* ===== COUNTDOWN LOCK LOGIC (ADDED) ===== */
+    (function(){
+      const lockOverlay = document.getElementById("lockOverlay");
+      const lockFlash   = document.getElementById("lockFlash");
+      const lockNowText = document.getElementById("lockNowText");
+      const lockProg    = document.getElementById("lockProg");
+
+      const cdDays  = document.getElementById("cdDays");
+      const cdHours = document.getElementById("cdHours");
+      const cdMins  = document.getElementById("cdMins");
+      const cdSecs  = document.getElementById("cdSecs");
+
+      const lockToggleFx = document.getElementById("lockToggleFx");
+      const lockTestUnlock = document.getElementById("lockTestUnlock");
+
+      function computeTarget(){
+        const now = new Date();
+        const y = now.getFullYear();
+        let target = new Date(y, 1, 14, 0, 0, 0, 0); // Feb 14, 00:00 local
+        if(now.getTime() >= target.getTime()){
+          target = new Date(y + 1, 1, 14, 0, 0, 0, 0);
+        }
+        return target;
+      }
+
+      const target = computeTarget();
+      const start  = new Date(target.getFullYear(), 1, 1, 0, 0, 0, 0); // Feb 1, 00:00
+
+      function pad2(n){ return String(n).padStart(2,"0"); }
+
+      function freezeAll(on){
+        const btns = [yesBtn, noBtn, toggleMusic, skipBtn, closeBtn, quizNext, finalCheck];
+        btns.forEach(b=>{ if(b) b.disabled = !!on; });
+        if(card) card.style.pointerEvents = on ? "none" : "auto";
+        setPauseFX(!!on);
+      }
+
+      function showLock(){
+        lockOverlay.classList.add("show");
+        lockOverlay.setAttribute("aria-hidden","false");
+        freezeAll(true);
+        try{
+          quizOverlay.classList.remove("show");
+          overlay.classList.remove("show");
+          finalCine.classList.remove("show");
+        }catch(e){}
+      }
+
+      function hideLock(){
+        lockOverlay.classList.remove("show");
+        lockOverlay.setAttribute("aria-hidden","true");
+        freezeAll(false);
+      }
+
+      function unlockNow(){
+        lockFlash.classList.add("flash");
+        setTimeout(()=>lockFlash.classList.remove("flash"), 420);
+        try{ launchConfetti(); }catch(e){}
+        try{ toast("Unlocked 💘"); }catch(e){}
+        hideLock();
+      }
+
+      function tick(){
+        const now = new Date();
+        try{
+          lockNowText.textContent = "NOW: " + now.toLocaleString();
+        }catch(e){
+          lockNowText.textContent = "NOW: " + now.toString();
+        }
+
+        const diff = target.getTime() - now.getTime();
+        if(diff <= 0){
+          cdDays.textContent  = "00";
+          cdHours.textContent = "00";
+          cdMins.textContent  = "00";
+          cdSecs.textContent  = "00";
+          lockProg.style.width = "100%";
+          unlockNow();
+          return;
+        }
+
+        const totalSec = Math.floor(diff / 1000);
+        const days = Math.floor(totalSec / 86400);
+        const hrs  = Math.floor((totalSec % 86400) / 3600);
+        const mins = Math.floor((totalSec % 3600) / 60);
+        const secs = totalSec % 60;
+
+        cdDays.textContent  = pad2(days);
+        cdHours.textContent = pad2(hrs);
+        cdMins.textContent  = pad2(mins);
+        cdSecs.textContent  = pad2(secs);
+
+        const nowT = now.getTime();
+        const startT = start.getTime();
+        const endT = target.getTime();
+        const p = Math.max(0, Math.min(1, (nowT - startT) / (endT - startT)));
+        lockProg.style.width = (p * 100).toFixed(2) + "%";
+      }
+
+      lockToggleFx.addEventListener("click", ()=>{
+        const paused = document.body.classList.toggle("pauseFX");
+        lockToggleFx.textContent = paused ? "▶ Resume FX" : "⏸ Pause FX";
+      });
+
+      lockTestUnlock.addEventListener("click", ()=>{
+        unlockNow();
+      });
+
+      lockOverlay.addEventListener("click",(e)=>{ e.preventDefault(); e.stopPropagation(); });
+
+      window.addEventListener("keydown",(e)=>{
+        if(e.key === "Escape" && lockOverlay.classList.contains("show")){
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      }, true);
+
+      const now = new Date();
+      if(now.getTime() < target.getTime()){
+        showLock();
+        tick();
+        setInterval(tick, 250);
+      }else{
+        hideLock();
+      }
+    })();
   </script>
 </body>
 </html>
-
-
