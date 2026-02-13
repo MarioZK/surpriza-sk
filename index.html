@@ -2318,22 +2318,25 @@ breakTakeoverPromise.addEventListener("click", ()=>{
 
 
     // Overlays open/close
-    function openRevealOverlay(){
-      setPauseFX(true);
-      setTime();
-      overlay.classList.add("show");
-      launchConfetti();
+function openRevealOverlay(){
+  setPauseFX(true);
+  setTime();
+  overlay.classList.add("show");
+  launchConfetti();
 
-      const extra =
+  const extra =
 `\n\nPS: ${NAME}, raspunsurile tale mi-au placut.\n- Data: ${quizAnswers.date || "perfecta"}\n- Procent: ${quizAnswers.percent || "∞"}\n- De cate ori vreau sa ne futem pe zi?: "${quizAnswers.vibe || "INFINIT"}"\n`;
 
-      typeMessage(MESSAGE + extra);
-      toast("Surprise unlocked 💖");
-    }
-    const torExtra =
-`\n\nBONUS: Truth or Risk\n- Mode: ${torAnswers.mode || "—"}\n- Prompt: ${torAnswers.prompt || "—"}\n- Reply/Done: ${torAnswers.mode==="truth" ? (torAnswers.reply || "(n-a scris)") : (torAnswers.done ? "Done ✅" : "—")}\n`;
+  const torExtra =
+`\n\nBONUS: Truth or Risk\n- Mode: ${torAnswers.mode || "—"}\n- Prompt: ${torAnswers.prompt || "—"}\n- Reply/Done: ${
+    torAnswers.mode==="truth"
+      ? (torAnswers.reply || "(n-a scris)")
+      : (torAnswers.done ? "Done ✅" : "—")
+  }\n`;
 
-typeMessage(MESSAGE + extra + torExtra);
+  typeMessage(MESSAGE + extra + torExtra);
+  toast("Surprise unlocked 💖");
+}
 
 
     function closeRevealOverlay(){
@@ -3212,6 +3215,7 @@ if(now.getTime() < target.getTime()){
   </script>
 </body>
 </html>
+
 
 
 
