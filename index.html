@@ -1343,6 +1343,74 @@ body.lightsOut .hearts{ opacity:.06 !important; filter: grayscale(1) contrast(1.
   0%{opacity:1}
   100%{opacity:0}
 }
+    /* ===== TRUTH OR RISK (ADDED) ===== */
+.torCard{ max-width: 920px; }
+.torChoices{
+  display:flex;
+  gap:12px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top: 6px;
+}
+.torChoice{
+  min-width: 220px;
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.18);
+  color: rgba(255,255,255,.92);
+  font-weight: 1000;
+  cursor:pointer;
+  box-shadow: 0 18px 60px rgba(0,0,0,.40);
+  transition: transform .12s ease, opacity .2s ease;
+}
+.torChoice:active{ transform: translateY(2px) scale(.99); }
+
+.torTruth{
+  background: linear-gradient(180deg, rgba(77,255,208,.22), rgba(0,0,0,.18));
+}
+.torRisk{
+  background: linear-gradient(180deg, rgba(255,47,122,.28), rgba(0,0,0,.18));
+}
+
+.torPanel{
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 22px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.18);
+  box-shadow: 0 22px 80px rgba(0,0,0,.35);
+}
+.torTag{
+  display:inline-flex;
+  padding: 7px 10px;
+  border-radius: 999px;
+  border:1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.18);
+  font-size: 12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  font-weight:1000;
+  color: rgba(255,255,255,.80);
+}
+.torPrompt{
+  margin: 10px 0 8px;
+  font-weight: 900;
+  line-height:1.35;
+}
+.torInput{
+  width:100%;
+  padding: 12px 12px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,.16);
+  background: rgba(0,0,0,.18);
+  color: rgba(255,255,255,.92);
+  outline:none;
+  font-size: 15px;
+  resize: vertical;
+}
+.torInput::placeholder{ color: rgba(255,255,255,.55); }
+
 
 
 
@@ -1424,6 +1492,50 @@ body.lightsOut .hearts{ opacity:.06 !important; filter: grayscale(1) contrast(1.
       </div>
     </div>
   </div>
+
+  <!-- ===== TRUTH OR RISK (ADDED) ===== -->
+<div class="overlay" id="torOverlay" aria-hidden="true">
+  <div class="quizCard torCard">
+    <div class="quizHead">
+      <p class="quizTitle" id="torTitle">Truth or Risk 💬🔥</p>
+      <span class="quizStep" id="torStep">BONUS</span>
+    </div>
+
+    <div class="quizBody">
+      <p class="qText" id="torText">Alege una. Fără frică 😏</p>
+
+      <div class="torChoices">
+        <button class="torChoice torTruth" id="torTruthBtn">TRUTH 💬</button>
+        <button class="torChoice torRisk" id="torRiskBtn">RISK 🔥</button>
+      </div>
+
+      <div class="torPanel" id="torPanel" style="display:none;">
+        <div class="torTag" id="torTag">TRUTH</div>
+        <p class="torPrompt" id="torPrompt"></p>
+
+        <!-- Truth input -->
+        <textarea class="torInput" id="torInput" rows="4" placeholder="Scrie aici… (opțional)"></textarea>
+
+        <!-- Risk “done” -->
+        <div class="finalBox torDoneRow" id="torDoneRow" style="display:none;">
+          <input type="checkbox" id="torDoneCheck" />
+          <label for="torDoneCheck">
+            <div><b>Done</b> ✅</div>
+            <div style="font-size:12px; color: rgba(255,255,255,.70); margin-top:4px;">
+              (Bifează când e gata 😏)
+            </div>
+          </label>
+        </div>
+
+        <div class="quizActions" style="padding: 10px 0 0;">
+          <div class="quizMsg" id="torMsg"></div>
+          <button class="quizBtn" id="torContinue">Continue ➜</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
   <div class="overlay" id="breakOverlay" aria-hidden="true">
@@ -1692,6 +1804,21 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
     const quizNext = document.getElementById("quizNext");
     const quizProgBar = document.getElementById("quizProgBar");
 
+    // ===== TRUTH OR RISK (ADDED) =====
+const torOverlay  = document.getElementById("torOverlay");
+const torText     = document.getElementById("torText");
+const torTruthBtn = document.getElementById("torTruthBtn");
+const torRiskBtn  = document.getElementById("torRiskBtn");
+const torPanel    = document.getElementById("torPanel");
+const torTag      = document.getElementById("torTag");
+const torPrompt   = document.getElementById("torPrompt");
+const torInput    = document.getElementById("torInput");
+const torDoneRow  = document.getElementById("torDoneRow");
+const torDoneCheck= document.getElementById("torDoneCheck");
+const torMsg      = document.getElementById("torMsg");
+const torContinue = document.getElementById("torContinue");
+
+
     const overlay = document.getElementById("overlay");
     const msgBox = document.getElementById("msgBox");
     const typedEl = document.getElementById("typed");
@@ -1735,6 +1862,8 @@ Te iubesc. Si vreau sa fiu mai bun pentru tine. ❤️`;
     let compat = 99.1;
 
     const quizAnswers = { date:"", percent:"", vibe:"" };
+    const torAnswers = { mode:"", prompt:"", reply:"", done:false };
+
 
     // Helpers
     function toast(text){
@@ -2196,11 +2325,16 @@ breakTakeoverPromise.addEventListener("click", ()=>{
       launchConfetti();
 
       const extra =
-`\n\nPS: ${NAME}, raspunsurile tale mi-au placut.\n- Data: ${quizAnswers.date || "perfecta"}\n- Procent: ${quizAnswers.percent || "∞"}\n- De cate ori vreau sa ne futem pe zi?: "${quizAnswers.vibe || "totul"}"\n`;
+`\n\nPS: ${NAME}, raspunsurile tale mi-au placut.\n- Data: ${quizAnswers.date || "perfecta"}\n- Procent: ${quizAnswers.percent || "∞"}\n- De cate ori vreau sa ne futem pe zi?: "${quizAnswers.vibe || "INFINIT"}"\n`;
 
       typeMessage(MESSAGE + extra);
       toast("Surprise unlocked 💖");
     }
+    const torExtra =
+`\n\nBONUS: Truth or Risk\n- Mode: ${torAnswers.mode || "—"}\n- Prompt: ${torAnswers.prompt || "—"}\n- Reply/Done: ${torAnswers.mode==="truth" ? (torAnswers.reply || "(n-a scris)") : (torAnswers.done ? "Done ✅" : "—")}\n`;
+
+typeMessage(MESSAGE + extra + torExtra);
+
 
     function closeRevealOverlay(){
       overlay.classList.remove("show");
@@ -2429,6 +2563,25 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
       quizMsg.textContent = "";
       quizNext.textContent = (qIndex===2) ? "Finish ✨" : "Next ➜";
     }
+
+    const TRUTH_PROMPTS = [
+  "Care a fost momentul în care ai simțit că sunt al tău?",
+  "Ce lucru mic fac eu care te linisteste instant?",
+  "Daca ai putea pastra o singura amintire cu mine, care ar fii aceea?",
+  "Ce nu-mi spui des, dar ai vrea să știu?"
+];
+
+const RISK_PROMPTS = [
+  "Trimite-mi ACUM un nude pe whatsapp 😏",
+  "Trimite-mi o poza cu un pupic",
+  "Fa-ti pe cur un SK si trimite-mi poza",
+  "Trimite-mi acum un vocal in care gemi"
+];
+
+function pick(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
     function nextQ(){
       const q = questions[qIndex];
       const v = qInput.value;
@@ -2443,11 +2596,12 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
 
       setTimeout(()=>{
         qIndex++;
-        if(qIndex>=questions.length){
-          closeQuiz();
-          openRevealOverlay();
-          return;
-        }
+if(qIndex>=questions.length){
+  closeQuiz();
+  openTruthOrRisk();
+  return;
+}
+
         renderQ();
         qInput.focus();
       }, 650);
@@ -2513,8 +2667,89 @@ Te iubesc, ${NAME}., happy valentine bita mea ❤️`;
         if(overlay.classList.contains("show")) closeRevealOverlay();
         if(quizOverlay.classList.contains("show")) closeQuiz();
         if(finalCine.classList.contains("show")) closeFinalCine();
+        if(torOverlay.classList.contains("show")) closeTruthOrRisk();
       }
     });
+
+
+    function openTruthOrRisk(){
+  setPauseFX(true);
+  torOverlay.classList.add("show");
+  torOverlay.setAttribute("aria-hidden","false");
+
+  // reset UI
+  torPanel.style.display = "none";
+  torInput.style.display = "none";
+  torDoneRow.style.display = "none";
+  torDoneCheck.checked = false;
+  torMsg.textContent = "";
+  torInput.value = "";
+
+  torText.textContent = "Alege una. Fără frică 😏";
+  toast("Bonus unlocked 😈");
+}
+
+function closeTruthOrRisk(){
+  torOverlay.classList.remove("show");
+  torOverlay.setAttribute("aria-hidden","true");
+}
+
+    function setTorMode(mode){
+  torAnswers.mode = mode;
+  torAnswers.reply = "";
+  torAnswers.done = false;
+
+  torPanel.style.display = "block";
+  torMsg.textContent = "";
+
+  if(mode === "truth"){
+    torTag.textContent = "TRUTH";
+    torPrompt.textContent = pick(TRUTH_PROMPTS);
+    torAnswers.prompt = torPrompt.textContent;
+
+    torInput.style.display = "block";
+    torInput.placeholder = "Scrie aici… (opțional)";
+    torDoneRow.style.display = "none";
+    setTimeout(()=> torInput.focus(), 60);
+  } else {
+    torTag.textContent = "RISK";
+    torPrompt.textContent = pick(RISK_PROMPTS);
+    torAnswers.prompt = torPrompt.textContent;
+
+    torInput.style.display = "none";
+    torDoneRow.style.display = "flex";
+  }
+
+  toast(mode === "truth" ? "Truth 😏" : "Risk 🔥");
+}
+
+torTruthBtn.addEventListener("click", ()=> setTorMode("truth"));
+torRiskBtn.addEventListener("click", ()=> setTorMode("risk"));
+
+torContinue.addEventListener("click", ()=>{
+  if(!torAnswers.mode){
+    torMsg.textContent = "Alege Truth sau Risk 😏";
+    return;
+  }
+
+  if(torAnswers.mode === "truth"){
+    torAnswers.reply = (torInput.value || "").trim();
+    closeTruthOrRisk();
+    openRevealOverlay();
+    return;
+  }
+
+  // risk
+  if(!torDoneCheck.checked){
+    torMsg.textContent = "Bifează Done ✅ când e gata 😈";
+    return;
+  }
+
+  torAnswers.done = true;
+  closeTruthOrRisk();
+  openRevealOverlay();
+});
+
 
     /* ===== COUNTDOWN LOCK LOGIC (ADDED) ===== */
     (function(){
@@ -2977,6 +3212,7 @@ if(now.getTime() < target.getTime()){
   </script>
 </body>
 </html>
+
 
 
 
